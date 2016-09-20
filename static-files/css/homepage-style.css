@@ -9,7 +9,7 @@ h1 {
 div.background {
     margin: 10px;
     padding: 20px;
-    background-image: url("today.jpg");s
+    background-image: url("images/today.jpg");s
     background-repeat: no-repeat;
     background-size: 100%; 
     z-index: -1;

@@ -2,7 +2,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <link rel="stylesheet" type="text/css" href="signin-style.css"> 
+   <!-- Add Bootstrap, Jquery -->
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- Customed CSS file -->
+   <link rel="stylesheet" type="text/css" href="static-files/css/signin-style.css"> 
 </head>
 <body>
     <nav>
@@ -16,20 +21,24 @@
         <h1>Sign In</h1>
     </header> 
     <section class="form">
-    <img src="welcome-back.gif">
+    <img src="static-files/css/images/welcome-back.gif">
     <form>
     <div class = "form-input">
         <label><b>Username</b></label>
-        <input type ="text" placeholder = "Enter Username" name = "uname" required>
+        <input type ="text" placeholder="Enter Username" id="username" required>
         <label><b>Password</b></label>
-        <input type = "password" placeholder = "Enter Password" name = "pws" required>
+        <input type="password" placeholder="Enter Password" id="pwd" ="pws" required>
     </div>
 
-    <div class="button-login">
-        <input type="submit" name="submit" value = "LOGIN" >
+    <button type="button" id="login" class="btn btn-success">Login</button> 
     </form>
-    </div>   
     </section>
-    
+<!-- Javascript starts here: -->
+<script>
+document.getElementById("login").addEventListener("click", function(){
+    window.location.assign("profile.html")
+});
+
+</script>
 </body>
 </html>
