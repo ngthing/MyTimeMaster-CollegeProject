@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- Customed CSS file -->
+    <link rel="stylesheet" type="text/css" href="static-files/css/homepage-style.css">
+    <title>MyTimeMaster</title>
+</head>
+<body>
+
+<nav>
+    <li><a class="active" href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="#">Contact</a></li>
+    <li class="right"><a href="#">Welcome!</a></li>
+
+</nav>
+
+
+<div class="container">
+    <h2>Let's create your event!</h2><br/>
+
+
+<div id="list-of-events"></div>
+
+    <br/><button id="new" class="btn btn-default">Create New Event</button>
+
+</div>
+<script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+<script>
+    "use strict";
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyAWoy65K87hcXNTgbcW_wRa9-Sw3zwHi70",
+        authDomain: "mytimemaster.firebaseapp.com",
+        databaseURL: "https://mytimemaster.firebaseio.com",
+        storageBucket: "mytimemaster.appspot.com",
+        messagingSenderId: "17686327988"
+    };
+    firebase.initializeApp(config);
+    var eventsRef = firebase.database().ref("events");
+
+
+    function createEvent(value,key)
+    {
+        $('#list-of-events').append(
+                '<div class="event" data-key="' + key + '">'+
+                '<input onchange="itemChanged(this)" type="text" value="' + value + '"/>'+
+                '<button onclick="deleteEvent(this.parentElement)" class="btn btn-danger btn-xs">&#x2716;</button></div>'
+
+        );
+    }
+
+    eventsRef.on("child_added", function(data)
+    {
+        createEvent(data.val().event, data.key)
+    });
+    eventsRef.on("child_changed", function(data)
+    {
+        $('div[data-key="' + data.key + '"] input').val(data.val().event);
+    });
+    eventsRef.on("child_removed", function(data)
+    {
+        $('div[data-key="' + data.key + '"]').remove();
+    });
+
+    $('#new').click(function()
+    {
+        eventsRef.push({'event': ""});
+    });
+    function itemChanged(inputElem){
+        var key = inputElem.parentElement.dataset.key;
+        eventsRef.child(key).set({'event': inputElem.value});
+    }
+    function deleteEvent(divElem)
+    {
+//        divElem.parentElement.removeChild(divElem);
+          divElem.remove();
+        eventsRef.child(divElem.dataset.key).remove();
+    }
+//    $('#save').click(function()
+//    {
+//        var events = [];
+//        $('.list-of-events input').each(function()
+//        {
+//            eventsRef.push($(this).val());
+//        });
+//
+//    });
+
+</script>
+</body>
+</html>

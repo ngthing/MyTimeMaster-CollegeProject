@@ -1,69 +1,33 @@
-<!-- This is user's profile page. user can view his/her profile, add schedule and plan in here.  -->
+<!-- This is the homepage. It introduces about the application - allow user to navigate to other pages e.g. to login page, to user's profide page, and to get-user-input-page, etc.  -->
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-  <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<!--Add Jquery-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <!-- Customed CSS file -->
-	<link rel="stylesheet" type="text/css" href="static-files/css/homepage-style.css">
-
-	<title>Profile</title>
+    <meta charset="utf-8">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!--Add Jquery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Customed CSS file -->
+    <link rel="stylesheet" type="text/css" href="static-files/css/homepage-style.css">
+    <title>MyTimeMaster</title>
 </head>
 <body>
-<!-- Navigation Bar -->
-<nav>
-  <li><a href="index.html">Home</a></li>
-  <li><a href="#">Contact</a></li>
-  <li class="right"><a href="profile.html">Welcome, Joy</a></li>
-</nav>
-<!-- This column will get user's input-->
-<div class="col-sm-6" id="get-input">
-  <h3>Hi Joy, let's get started with MyTimeMaster!</h3>
-  <h5>Step 1: Provide your fixed schedule</h5>
-  
-    <div id="schedule-input">
-      <form>
-        <label><b>Schedule</b></label><br/>
-        <input type ="text" placeholder="SWE423 T,R 12:00pm-1:15pm" id="schedule" required>
-        <button type="button" id="submit" class="btn btn-success btn-xs">Ok</button>  
-     </form>
-    </div>
-    <button type="button" id="back" class="btn btn-danger btn-xs">Back</button>  
-     </form>
-  <!-- <div class="input_fields_wrap">
-    <button class="add_field_button">Add More Fields</button>
-    <div><input type="text" name="mytext[]"></div>
-</div> -->
-</div>
-<!-- This column will show the summary of user's input-->
-<div class="col-sm-6" id="show-input">
-  <h3>Joy's current input summary</h3><br/>
-  <div id="input-summary" class="list-group">
-  </div>
-</body>
-<script type="text/javascript">
-$(document).ready(function(){
-$("#submit").click(function(){
-  // Add new schedule 
-    var item = $("#schedule").val();
-    $("#input-summary").append('<a class="list-group-item">'+ item +'</a>');
-    $("#schedule").val('');
-    // push current view to state
-    history.pushState();
-});
-$('#back').click(function(){
-   window.history.state
-});
-});
 
-</script>
+<nav>
+    <li><a class="active" href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="#">Contact</a></li>
+    <li class="right"><a href="#">Sign out</a></li>
+</nav>
+<div class="background">
+    <header>
+        <h2>Your Profile</h2>
+    </header>
+
+</div>
+</body>
 </html>
