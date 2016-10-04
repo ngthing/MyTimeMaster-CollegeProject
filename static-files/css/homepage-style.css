@@ -1,5 +1,21 @@
-body{
+
+.container {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -100px; /* the bottom margin is the negative value of the footer's height */
+}
+#footer, .push {
+    height: 100px; /* .push must be the same height as .footer */
+}
+footer {
+    background-color: navy;
+    color: white;
+    padding: 10px;
+}
+html, body{
     margin: 10px ;
+    height: 100%;
     background-color: aliceblue;
 }
 
