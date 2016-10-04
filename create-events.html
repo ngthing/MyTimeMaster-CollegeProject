@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+    html, body {
+        marigin: 20px;
+        padding: 0px;
+        font-family: Verdana, Geneva, sans-serif;
+        text-align: center;
+    }
+</style>
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -8,9 +16,22 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/react@15.3.2/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15.3.2/dist/react-dom.js"></script>
+    <script src="https://unpkg.com/babel-core@5.8.38/browser.min.js"></script>
+
     <!-- Customed CSS file -->
     <link rel="stylesheet" type="text/css" href="static-files/css/homepage-style.css">
     <title>MyTimeMaster</title>
+    <style>
+        body{
+            magrin-top: 30px;
+        }
+        a.delete{
+            color: red;
+        }
+    </style>
 </head>
 <body>
 
@@ -23,76 +44,148 @@
 </nav>
 
 
-<div class="container">
-    <h2>Let's create your event!</h2><br/>
-
-
-<div id="list-of-events"></div>
-
-    <br/><button id="new" class="btn btn-default">Create New Event</button>
-
+<div class ="container">
+    <div class = "row">
+        <div class = "col-md-12">
+            <div id = "app"></div>
+        </div>
+    </div>
 </div>
-<script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
-<script>
-    "use strict";
-    // Initialize Firebase
-    var config = {
-        apiKey: "AIzaSyAWoy65K87hcXNTgbcW_wRa9-Sw3zwHi70",
-        authDomain: "mytimemaster.firebaseapp.com",
-        databaseURL: "https://mytimemaster.firebaseio.com",
-        storageBucket: "mytimemaster.appspot.com",
-        messagingSenderId: "17686327988"
-    };
-    firebase.initializeApp(config);
-    var eventsRef = firebase.database().ref("events");
+<script type="text/babel">
+    var App = React.createClass({
+        getInitialState: function () {
+            return{
+                text: '',
+                isEdit: 0,
+                todos: [
+                    {
+                        id:1,
+                        text: "Meeting with Bob"
+                    },
+                    {
+                        id:2,
+                        text: "Grocery shop"
+                    },
+                    {
+                        id:3,
+                        text: "biking"
+                    },
+                ]
+            }
+        },
+        render: function (){
+            return (
+                    <div>
+                        <TodoForm
+                                changeText = {this.handleChangeText}
+                                onTodoUpdate = {this.handleTodoUpdate}
+                                onTodoAdd = {this.handleTodoAdd} />
+
+                        <TodoList
+                                todos = {this.state.todos}
+                                editTodo = {this.handleTodoEdit}
+                                deleteTodo = {this.handleTodoDelete}/>
+                    </div>
+            )
+        },
 
 
-    function createEvent(value,key)
-    {
-        $('#list-of-events').append(
-                '<div class="event" data-key="' + key + '">'+
-                '<input onchange="itemChanged(this)" type="text" value="' + value + '"/>'+
-                '<button onclick="deleteEvent(this.parentElement)" class="btn btn-danger btn-xs">&#x2716;</button></div>'
+        handleTodoAdd: function (text){
+            var newTodo = {
+                id: this.state.todos.length +1,
+                text : text
+            }
 
-        );
-    }
+            this.setState({todos: this.state.todos.concat(newTodo)});
+        },
 
-    eventsRef.on("child_added", function(data)
-    {
-        createEvent(data.val().event, data.key)
+        handleChangeText: function(text){
+            this.setState({text: text});
+        },
+
+        handleTodoDelete: function(todo){
+            var todos = this.state.todos;
+            for(var i = 0; i < todos.length; i ++){
+                if (todos[i].id == todo.id){
+                    todos.splice(i, 1);
+                }
+            }
+            this.setState({todos: todos});
+        },
+
+        handleTodoEdit: function(todo){
+            this.setState({
+                text: todo.text,
+                isEdit: todo.id
+            });
+        },
+
+
     });
-    eventsRef.on("child_changed", function(data)
-    {
-        $('div[data-key="' + data.key + '"] input').val(data.val().event);
-    });
-    eventsRef.on("child_removed", function(data)
-    {
-        $('div[data-key="' + data.key + '"]').remove();
+
+    var TodoForm = React.createClass({
+        render: function (){
+            return (
+                    <div>
+                        <form onSubmit = {this.onSubmit}>
+                            <div className= "form-group">
+                                <h1> Let's Start to create events!</h1>
+                                <input type = "text" ref="text" value = {this.props.text} onchange = {this.onchange} className = "form-control"/>
+                            </div>
+                        </form>
+                    </div>
+            )
+        },
+
+        onChange: function (e){
+            this.props.changeText(e.target.value);
+        },
+
+        onSubmit: function (e){
+            e.preventDefault();
+            var text =  this.refs.text.value.trim();
+
+            if (!text){
+                alert ('please enter the event');
+                return;
+            }
+
+            if (this.props.isEdit){
+                var updatedTodo = {
+                    id: this.props.isEdit,
+                    text: text
+                }
+                this.props.onTodoUpdate(updateTodo);
+            }else{
+                this.props.onTodoAdd(text);
+            }
+            this.props.onTodoAdd(text);
+            this.refs.text.value = '';
+        }
     });
 
-    $('#new').click(function()
-    {
-        eventsRef.push({'event': ""});
+    var TodoList = React.createClass({
+        render: function (){
+            return (
+                    <ul className = "list-group">
+                        {
+                            this.props.todos.map(todo => {
+                                return <li className="list-group-item" todo = {todo} key= {todo.id} >
+                                    {todo.text} <a onClick = {this.onDelete.bind(this, todo)} className="delete" href ="#"> x</a></li>
+                            })
+                        }
+                    </ul>
+            )
+        },
+
+//        delete the element
+        onDelete: function(todo){
+            this.props.deleteTodo(todo);
+        },
+
     });
-    function itemChanged(inputElem){
-        var key = inputElem.parentElement.dataset.key;
-        eventsRef.child(key).set({'event': inputElem.value});
-    }
-    function deleteEvent(divElem)
-    {
-//        divElem.parentElement.removeChild(divElem);
-          divElem.remove();
-        eventsRef.child(divElem.dataset.key).remove();
-    }
-//    $('#save').click(function()
-//    {
-//        var events = [];
-//        $('.list-of-events input').each(function()
-//        {
-//            eventsRef.push($(this).val());
-//        });
-//
-//    });
+
+    ReactDOM.render(<App />, document.getElementById('app'));
 
 </script>
 </body>

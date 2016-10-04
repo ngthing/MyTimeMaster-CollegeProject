@@ -91,10 +91,11 @@ function loggedInSeccessful() {
         $('#next-step').append('<a href="calendar.html" class="btn btn-info" role="button">Provide your Calendar</a>');
         $('#next-step').append("<h4>Or</h4>");
         $('#next-step').append('<a href="create-events.html" class="btn btn-info" role="button">Create New Events</a>');
-
+        $('#next-step').append("<h4>Set up a meeting?</h4>");
+        $('#next-step').append('<a href="invite-friends.html" class="btn btn-info" role="button">Set Up A Meeting With Your Friend</a>');
     });
 }
-
+// Log user out of facebook and out of the web app
 function logout() {
     FB.getLoginStatus(function (response) {
         if (response && response.status === 'connected') {
@@ -107,3 +108,4 @@ function logout() {
         }
     });
 }
+// Integrate React when users don't sign up with Facebook.

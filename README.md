@@ -23,5 +23,6 @@ Users can set up the meeting time and specific person who they are going to meet
 Users  provide the time frame for each of their activities (activities will be categorized in types such as work, study, socialization, entertainment), and the application can display the information of how users use their time in week/month/year with the d3.js data visualization.
 
 Currently Implement: 
-1.     Registration
+1. set up the meeting
 2. Calendar
+3. create event
