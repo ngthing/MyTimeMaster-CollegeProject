@@ -1,10 +1,25 @@
+<!-- index.html -->
+<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8" />
+    <title>Calendar</title>
+
+    <link rel="stylesheet" type="text/css" href="static-files/css/homepage-style.css">
+
+    <script src="https://unpkg.com/react@15.3.2/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15.3.2/dist/react-dom.js"></script>
+    <script src="https://unpkg.com/babel-core@5.8.38/browser.min.js"></script>
+    <script src="https://unpkg.com/jquery@3.1.0/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/remarkable@1.6.2/dist/remarkable.min.js"></script>
+
     <script type="text/javascript">
-        //  Client ID can be retrieved from  project in the Google
+        // Your Client ID can be retrieved from your project in the Google
         // Developer Console, https://console.developers.google.com
         var CLIENT_ID = '865379735005-vhrdc7aq2o4kl5t2jki80m68nqgh6u3f.apps.googleusercontent.com';
+
         var SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"];
+
         /**
          * Check if current user has authorized this application.
          */
@@ -16,6 +31,7 @@
                         'immediate': true
                     }, handleAuthResult);
         }
+
         /**
          * Handle response from authorization server.
          *
@@ -32,6 +48,7 @@
                 authorizeDiv.style.display = 'inline';
             }
         }
+
         /**
          * Initiate auth flow in response to user clicking authorize button.
          *
@@ -42,6 +59,7 @@
                     handleAuthResult);
             return false;
         }
+
         /**
          * Load Google Calendar client library. List upcoming events
          * once client library is loaded.
@@ -49,6 +67,7 @@
         function loadCalendarApi() {
             gapi.client.load('calendar', 'v3', listUpcomingEvents);
         }
+
         /**
          * Print the summary and start datetime/date of the next ten events in
          * the authorized user's calendar. If no events are found an
@@ -63,9 +82,11 @@
                 'maxResults': 10,
                 'orderBy': 'startTime'
             });
+
             request.execute(function(resp) {
                 var events = resp.items;
                 appendPre('Upcoming events:');
+
                 if (events.length > 0) {
                     for (i = 0; i < events.length; i++) {
                         var event = events[i];
@@ -78,8 +99,10 @@
                 } else {
                     appendPre('No upcoming events found.');
                 }
+
             });
         }
+
         /**
          * Append a pre element to the body containing the given message
          * as its text node.
@@ -90,64 +113,79 @@
             var textContent = document.createTextNode(message + '\n');
             pre.appendChild(textContent);
         }
-        // function load the calendar api and make the api call
-        function makeApiCall() {
-            gapi.client.load('calendar', 'v3', function() {					// load the calendar api (version 3)
-                var request = gapi.client.calendar.events.insert({
-                    'calendarId':		'',	// calendar ID
-                    "resource":			resource							// pass event details with api call
-                });
-                // handle the response from  api call
-                request.execute(function(resp) {
-                    if(resp.status=='confirmed') {
-                        document.getElementById('event-response').innerHTML = "Event created successfully. View it <a href='" + resp.htmlLink + "'>online here</a>.";
-                    } else {
-                        document.getElementById('event-response').innerHTML = "There was a problem. Reload page and try again.";
-                    }
-                    for (var i = 0; i < resp.items.length; i++) {		// loop through events and write them out to a list
-                        var li = document.createElement('li');
-                        var eventInfo = resp.items[i].summary + ' ' +resp.items[i].start.dateTime;
-                        li.appendChild(document.createTextNode(eventInfo));
-                        document.getElementById('events').appendChild(li);
-                    }
-                    console.log(resp);
-                });
-            });
-        }
-        // display a calendar (not working now)
-        $(document).ready(function() {
-            var tz = jstz.determine(),
-                    $calendar = $('<iframe>', {
-                        src: 'https://www.google.com/calendar/embed?src=calendar.source&ctz=' + tz.name(),
-                        style: 'border: 0;',
-                        frameborder: 0,
-                        scrolling: 'no',
-                        width: 600,
-                        height: 800
-                    });
-            $calendar.appendTo('#divifm'); // where #container is the div where you want the calendar to go
-        });
 
     </script>
     <script src="https://apis.google.com/js/client.js?onload=checkAuth">
     </script>
+
 </head>
 <body>
-<div id="divifm">
-    <iframe src="https://calendar.google.com/calendar/embed?height=600&amp;
-    wkst=1&amp;bgcolor=%23FFFFFF&amp;color=%231B887A&amp;ctz=America%2FNew_York" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
 
-</div>
+<div id="content"></div>
+<iframe src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%23ffffff&amp;src=qfdy0126%40gmail.com&amp;color=%231B887A&amp;ctz=America%2FNew_York" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
 
-<h1>Calendar</h1>
-<p>The up comming events of your calendar is shown in this tab.</p>
+<!--React component-->
+<script type="text/babel">
+    var CalList = React.createClass({
+        render: function() {
+            return (
+                    <div className="calList">
+                        The upcoming events of your caledar is shown in this tab.
+                    </div>
+            );
+        }
+    });
+
+    var CalHead = React.createClass({
+        render: function() {
+            return (
+                    <div className="calHead">
+                        <h1>Welcome to my Calendar!!</h1>
+                    </div>
+            );
+        }
+    });
+
+    var Button = React.createClass({
+        handleAuthoClick: function () {
+            gapi.auth.authorize(
+                    {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
+                    handleAuthResult);
+            return false;
+        },
+        render:function(){
+            return (
+                    <div>
+                        <span>Authorize access to Google Calendar API</span>
+                        <button onclick = {this.handelAuthoClick.event}>{'Authorize'}</button>
+                    </div>
+            );
+        }
+    });
+
+    var Calender = React.createClass({
+        render: function() {
+            return (
+                    <div>
+                        <CalHead />
+                        <CalList />
+                    </div>
+            );
+        }
+    });
+
+    ReactDOM.render(
+            React.createElement(Calender, null),
+            document.getElementById('content')
+    );
+
+</script>
 <div id="authorize-div" style="display: none">
+    <!--&lt;!&ndash;Button for the user to click to initiate auth sequence &ndash;&gt;-->
     <span>Authorize access to Google Calendar API</span>
-    <!--Button for the user to click to initiate auth sequence -->
     <button id="authorize-button" onclick="handleAuthClick(event)">
         Authorize
     </button>
 </div>
-<pre id="output"></pre>
 </body>
 </html>
