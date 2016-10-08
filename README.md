@@ -17,7 +17,7 @@ The 4 scenarios of the MyTimeMaster Apps
 A new user can create a personal account by using proving their first and last name, address and password. The application will check if the email address is valid. After registering, users can login can start using the application features to plan and allocate their time/daily/ weekly/monthly activities.
 Users can also sign up with their Facebook Account.
 
-2.     Provide Calendar
+2.     Create Events
 The user will create event/daily task in this app.
 
 3.     Set up the meeting
