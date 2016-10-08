@@ -1,6 +1,8 @@
 # MyTimeMaster
 A time management and planner application
+
 Demo available at: https://ngthing.github.io/MyTimeMaster/ 
+
 Note: This project is in process. Demo has not yet fully reflected the App's description below. 
 
 MyTimeMaster is a time management and planner application. With MyTimeMaster app, a user can create a personal account and use the app as a tool to plan and allocate their time daily/weekly/monthly. User will input information such as class schedules, what they plan to do for certain hours of a day/a week, who they will meet, etc. The app will read user input and display in a calendar interface.
