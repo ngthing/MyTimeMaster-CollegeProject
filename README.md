@@ -1,7 +1,9 @@
 # MyTimeMaster
 A time management and planner application
+Demo available at: https://ngthing.github.io/MyTimeMaster/ 
+Note: This project is in process. Demo has not yet fully reflected the App's description below. 
 
-MyTimeMaster is a time management and planner application. With MyTimeMaster app, a user can create a personal account and use the app as a tool to plan and allocate their time daily/weekly/monthly. User will input information such as class schedules, what they plan to do for certain hours of a day/a week, who they will meet, etc. The app will read user input and display in a calendar interface (requirement 1) 
+MyTimeMaster is a time management and planner application. With MyTimeMaster app, a user can create a personal account and use the app as a tool to plan and allocate their time daily/weekly/monthly. User will input information such as class schedules, what they plan to do for certain hours of a day/a week, who they will meet, etc. The app will read user input and display in a calendar interface.
 
 Furthermore, this app aims to promote the users with a habit of managing time wisely and living a fulfilled and balanced life. Specifically, users will use the app to plan their week/month in advance and specific what type of activities they do (e.i. Study, work, exercise, art work, entertain, socialize, sleep, etc.). Then the app will calculate the total hours the users use per week/per month and display the information of how users use their time with d3.js data visualization (requirement 3).The data will also be used to measure their work-life balance or their productivity. 
 
@@ -23,6 +25,6 @@ Users can set up the meeting time and specific person who they are going to meet
 Users  provide the time frame for each of their activities (activities will be categorized in types such as work, study, socialization, entertainment), and the application can display the information of how users use their time in week/month/year with the d3.js data visualization.
 
 Currently Implement: 
-1. set up the meeting
+1. Set up the meeting
 2. Calendar
-3. create event
+3. Create event
