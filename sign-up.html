@@ -51,25 +51,25 @@
     <div id="next-step"></div>
   
  <form>
-  <!--  Right now, we only implement sign up via Facebook account  
-       <label><b>Firstname</b></label>
-        <input type="text" placeholder = "Enter First Name" id="firstname" required>
-        <label><b>Lastname</b></label>
-        <input type ="text" placeholder="Enter Last Name" id="lastname" required><br/>
-        <label><b>Email</b></label><br/>
-        <input type="email" placeholder = "Enter email address" id="email" required>
-        <label><b>Password</b></label>
-        <input type = "password" placeholder="Enter Password" id="pws" required>
-        <div><button type="button" id="signup" class="btn btn-success">Sign up</button></div>
- -->     
- <!--
-          Below we include the Login Button social plugin. This button uses
-          the JavaScript SDK to present a graphical Login button that triggers
-          the FB.login() function when clicked.
-        -->
-        <h4>In Hurry? </h4>
-        <fb:login-button data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="false" scope="public_profile,email" onlogin="checkLoginState();">
-        </fb:login-button>
+
+   <label><b>Firstname</b></label>
+    <input type="text" placeholder = "Enter First Name" id="firstname" required>
+    <label><b>Lastname</b></label>
+    <input type ="text" placeholder="Enter Last Name" id="lastname" required><br/>
+    <label><b>Email</b></label><br/>
+    <input type="email" placeholder = "Enter email address" id="email" required>
+    <label><b>Password</b></label>
+    <input type = "password" placeholder="Enter Password" id="pws" required>
+    <div><button type="button" id="signup" class="btn btn-success">Sign up</button></div>
+
+<!--
+      Below we include the Login Button social plugin. This button uses
+      the JavaScript SDK to present a graphical Login button that triggers
+      the FB.login() function when clicked.
+    -->
+    <h4>In Hurry? </h4>
+    <fb:login-button data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="false" scope="public_profile,email" onlogin="checkLoginState();">
+    </fb:login-button>
     </form>
 </section>
 
