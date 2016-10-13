@@ -20,14 +20,15 @@ Users can also sign up with their Facebook Account.
 2.     Create Events
 The user will create event/daily task in this app.
 
-3.     Set up the meeting
-User can set up the meeting time with a specific person who are his/her friend in Facebook.
+3.     Display Events
+Show events 
 
-4.     Time calculation (d3.js)
+4.    Time allocation chart (d3.js)
 Users  provide the time frame for each of their activities (activities will be categorized in types such as work, study, socialization, entertainment), and the application can display the information of how users use their time in week/month/year with the d3.js data visualization.
 
 Currently Implement: 
 1. Registration
 2. Create event  
-3. Set up the meeting
+3. Show events
+4. Time allocation chart
 
