@@ -3,22 +3,36 @@
 <html>
 <head>
 	<meta charset="utf-8">
+    <title>MyTimeMaster</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <!-- Customed CSS file -->
+    <!-- Customed CSS file -->
 	<link rel="stylesheet" type="text/css" href="static-files/css/homepage-style.css">
-    <!--Include React-->
-    <script src="https://unpkg.com/react@15.3.2/dist/react.js"></script>
-    <script src="https://unpkg.com/react-dom@15.3.2/dist/react-dom.js"></script>
-    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
-    <script src="https://unpkg.com/jquery@3.1.0/dist/jquery.min.js"></script>
-    <script src="https://unpkg.com/remarkable@1.7.1/dist/remarkable.min.js"></script>
-    <!-- End include React-->
-	<title>MyTimeMaster</title>
+    <!-- React -->
+    <script src="https://fb.me/react-15.3.0.min.js"></script>
+    <script src="https://fb.me/react-dom-15.3.0.min.js"></script>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
+
+    <!-- ReactFire -->
+    <script src="https://cdn.firebase.com/libs/reactfire/1.0.0/reactfire.min.js"></script>
+
+    <!-- throw-in-the-towel -->
+    <script src="https://unpkg.com/throw-in-the-towel@2"></script>
+
+    <!-- Markdown -->
+    <script src="https://unpkg.com/showdown@0.3.1"></script>
+
+    <!-- Custom JS -->
+    <script type="text/babel" src="static-files/js/main.js"></script>
+    <!-- D3.js-->
+    <script src="//d3js.org/d3.v3.min.js"></script>
+
 </head>
 <body>
 
@@ -29,59 +43,17 @@
   <li class="right"><a href="sign-in.html">Sign in</a></li>
   <li class="right"><a href="sign-up.html">Sign up</a></li>
 </nav>
-<!--The content of the page start here-->
-<div id="content" class="container">
-    <h2 align="center">MyTimeMaster</h2>
-    <p>How did I use my hours today?</p>
-    <div id="form-title" class="row">
-        <div class="col-sm-4">
-            Activity/Event
-        </div>
-        <div class="col-sm-4">
-            Type
-        </div>
-        <div class="col-sm-4">
-            Time (minutes)
-        </div>
-    </div>
-    <div id="list-activities" class="row">
-        <div id="activity-1">
-            <div class="col-sm-4">
-                <input type="text" class="form-control" id="a-1-name">
-            </div>
-            <div class="col-sm-4">
-                <select class="form-control" id="a-1-type">
-                    <option>Work</option>
-                    <option>Class</option>
-                    <option>Self-Study</option>
-                    <option>Socialize</option>
-                    <option>Entertainment</option>
-                </select>
-            </div>
-            <div class="col-sm-4">
-                <input type="range" name="minutes" min="0" max="120">
-            </div>
-        </div>
+<br/>
+<div id="content" class="col-sm-6">
+    <!-- This element's contents will be replaced with your component. -->
+</div>
+<div id="chart" class="col-sm-6">
+    <!-- This element's contents will be replaced with your component. -->
+    <h1>Today's Time Allocation</h1><br/>
+    <svg class="chart"></svg>
 
-    </div>
-
-    <div id="summary">
-        <h5>Today's Activities Summary:</h5>
-    </div>
 
 </div>
-
-
-
-<!--Footer -->
-<br/>
-<footer class="container-fluid text-center">
-
-    <p>Brought To You From: Thi Nguyen & Binh Dang &copy</p>
-    <!--<p>Brought To You From: Thi Nguyen & Binh Dang &copy</p>-->
-</footer>
-<!--End Footer-->
-<!-- Javascript starts here-->
 
 </body>
 </html>
