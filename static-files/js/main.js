@@ -182,6 +182,6 @@ describe('EventBox', function () {
             expect(todoAppComponent.fireRef.child).toHaveBeenCalled();
             expect(setSpy).toHaveBeenCalledWith({text: "try"});
         });
-    // });
+     });
 
 });
