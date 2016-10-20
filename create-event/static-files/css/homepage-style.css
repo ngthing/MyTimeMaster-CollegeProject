@@ -1,0 +1,78 @@
+.chart rect {
+    fill: steelblue;
+}
+
+.chart text {
+    fill: white;
+    font: 10px sans-serif;
+    text-anchor: end;
+}
+
+.container {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -100px; /* the bottom margin is the negative value of the footer's height */
+}
+#footer, .push {
+    height: 100px; /* .push must be the same height as .footer */
+}
+footer {
+    background-color: navy;
+    color: white;
+    padding: 10px;
+}
+html, body{
+    margin: 10px ;
+    height: 100%;
+    background-color: aliceblue;
+}
+
+h1 {
+    color: navy;
+    text-align: center;
+}
+article {
+    margin: 20px;
+    padding: 3px;
+    text-align: center;
+    background-color: #ffffff;
+    opacity: 0.6;
+    filter: alpha(opacity=60); /* For IE8 and earlier */
+    border-radius: 25px;
+}
+nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    background-color: transparent;
+}
+
+nav li {float: left;}
+
+nav li a {
+    display: block;
+    color: navy;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    border-radius: 8px;
+}
+
+
+nav li a:hover:not(.active) {background-color: lightblue;}
+
+nav li a.active {background-color: lightblue;}
+
+nav li a:hover {
+    text-decoration:none;
+}
+
+nav li.right {float: right;}
+
+@media screen and (max-width: 600px){
+    nav li.right,
+    nav li {float: none;}
+}
