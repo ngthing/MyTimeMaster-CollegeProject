@@ -12,10 +12,10 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <!-- Customed CSS file -->
 	<link rel="stylesheet" type="text/css" href="static-files/css/homepage-style.css">
-    <!-- React -->
-    <script src="https://fb.me/react-15.3.0.min.js"></script>
-    <script src="https://fb.me/react-dom-15.3.0.min.js"></script>
-
+    <!-- Super important: use react with addons!!! -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-with-addons.js"></script>
+    <script src="https://fb.me/react-dom-15.0.0.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
 
@@ -28,11 +28,13 @@
     <!-- Markdown -->
     <script src="https://unpkg.com/showdown@0.3.1"></script>
 
-    <!-- Custom JS -->
-    <script type="text/babel" src="static-files/js/main.js"></script>
     <!-- D3.js-->
     <script src="//d3js.org/d3.v3.min.js"></script>
-
+    <!-- Jasmine -->
+    <script type="text/javascript" src="jasmine/lib/jasmine-2.5.2/jasmine.js"></script>
+    <script type="text/javascript" src="jasmine/lib/jasmine-2.5.2/jasmine-html.js"></script>
+    <script type="text/javascript" src="jasmine/lib/jasmine-2.5.2/boot.js"></script>
+    <link rel="stylesheet" type="text/css" href="jasmine/lib/jasmine-2.5.2/jasmine.css">
 </head>
 <body>
 
@@ -44,16 +46,19 @@
   <li class="right"><a href="sign-up.html">Sign up</a></li>
 </nav>
 <br/>
-<div id="content" class="col-sm-6">
+<div></div>
+<div id="content" >
     <!-- This element's contents will be replaced with your component. -->
 </div>
-<div id="chart" class="col-sm-6">
+<div id="chart">
     <!-- This element's contents will be replaced with your component. -->
     <h1>Today's Time Allocation</h1><br/>
     <svg class="chart"></svg>
 
-
 </div>
+
+<!-- Custom JS -->
+<script type="text/babel" src="static-files/js/main.js"></script>
 
 </body>
 </html>

@@ -103,6 +103,8 @@ ref.on("value", function(snapshot) {
 }, function (errorObject) {
     console.log("The read failed: " + errorObject.code);
 });
+// D3js starts here
+//This data should be the data events from firebase. Have to figure out how to get this data
 var data = [{"name":"Study for CS306","hours": 4},{"name":"Learn React","hours": 5}, {"name":"HW5","hours": 2}];
 
 var width = 420,
@@ -130,3 +132,56 @@ bar.append("text")
     .attr("y", barHeight / 2)
     .attr("dy", ".35em")
     .text(function(d) { return d.name + " for " + d.hours + "hrs";});
+
+// Jasmine starts here
+describe('EventBox', function () {
+    var TestUtils = React.addons.TestUtils;
+    var eventBoxComponent, element, renderedDOM;
+    beforeEach(function (done) {
+        element = React.createElement(EventBox);
+        eventBoxComponent = TestUtils.renderIntoDocument(element);
+        eventBoxComponent.setState({items: [{text: "testItem"}]}, done);
+    });
+    it("Has a Save button", function () {
+        let buttons = TestUtils.scryRenderedDOMComponentsWithTag(eventBoxComponent, "input");
+        expect(inputs[3]).not.toBeUndefined();
+        expect(inputs[3].innerHTML).toBe("Save");
+    });
+    it("Has a EventList component", function () {
+        expect(function () {
+            TestUtils.findRenderedComponentWithType(eventBoxComponent, EventList);
+        }).not.toThrow();
+    });
+    it("Has a EventForm component", function () {
+        expect(function () {
+            TestUtils.findRenderedComponentWithType(eventBoxComponent, EventForm);
+        }).not.toThrow();
+    });
+    describe("Save event button", function () {
+        beforeEach(function () {
+            spyOn(eventBoxComponent.fireRef, "push");
+        });
+        it("Causes fireBase push to be called", function () {
+            let inputSave = TestUtils.scryRenderedDOMComponentsWithTag(eventBoxComponent, "input")[3];
+            TestUtils.Simulate.click(inputSave);
+            expect(eventBoxComponent.fireRef.push).toHaveBeenCalledWith({});
+        });
+    });
+    describe("EventList", function () {
+        var eventListComponent;
+        beforeEach(function(){
+            eventListComponent = TestUtils.findRenderedComponentWithType(eventBoxComponent, EventList);
+        });
+        it("Updates firebase when text is changed", function(){
+            var setSpy;
+            setSpy = jasmine.createSpy("set");
+            spyOn(todoAppComponent.fireRef, "child").and.returnValue({set : setSpy});
+            var inputs = TestUtils.scryRenderedDOMComponentsWithTag(eventBoxComponent,"input");
+            inputs[0].value = "try";
+            TestUtils.Simulate.change(inputs[0]);
+            expect(todoAppComponent.fireRef.child).toHaveBeenCalled();
+            expect(setSpy).toHaveBeenCalledWith({text: "try"});
+        });
+    // });
+
+});
