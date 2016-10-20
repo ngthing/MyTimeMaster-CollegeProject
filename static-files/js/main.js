@@ -175,11 +175,11 @@ describe('EventBox', function () {
         it("Updates firebase when text is changed", function(){
             var setSpy;
             setSpy = jasmine.createSpy("set");
-            spyOn(todoAppComponent.fireRef, "child").and.returnValue({set : setSpy});
+            spyOn(eventBoxComponent.fireRef, "child").and.returnValue({set : setSpy});
             var inputs = TestUtils.scryRenderedDOMComponentsWithTag(eventBoxComponent,"input");
             inputs[0].value = "try";
             TestUtils.Simulate.change(inputs[0]);
-            expect(todoAppComponent.fireRef.child).toHaveBeenCalled();
+            expect(eventBoxComponent.fireRef.child).toHaveBeenCalled();
             expect(setSpy).toHaveBeenCalledWith({text: "try"});
         });
      });
