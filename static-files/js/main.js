@@ -92,46 +92,41 @@ ReactDOM.render(
 
 // D3js for chart here
 // Get a database reference to our posts
-var ref = firebase.database().ref('eventsBox');;
+var eventsBoxRef = firebase.database().ref('eventsBox');
+var data = [];
+eventsBoxRef.on('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+        var childData = childSnapshot.val();
+        console.log("print child");
+        console.log(childData);
+        data.push(childData);
+    });
+    var width = 420,
+        barHeight = 20;
 
-// Attach an asynchronous callback to read the data at our posts reference
-ref.on("value", function(snapshot) {
-    var data = snapshot.val();
-    console.log(data);
-    console.log(data.length);
+    var x = d3.scale.linear()
+        .domain([0, d3.max(data)])
+        .range([0, width]);
 
-}, function (errorObject) {
-    console.log("The read failed: " + errorObject.code);
+    var chart = d3.select(".chart")
+        .attr("width", width)
+        .attr("height", barHeight * data.length);
+
+    var bar = chart.selectAll("g")
+        .data(data)
+        .enter().append("g")
+        .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
+
+    bar.append("rect")
+        .attr("width", function(d){ return d.hours*100;})
+        .attr("height", barHeight - 1);
+
+    bar.append("text")
+        .attr("x", function(d,i) { return d.hours*100 - d.hours*10; })
+        .attr("y", barHeight / 2)
+        .attr("dy", ".35em")
+        .text(function(d) { return d.name + " for " + d.hours + "hrs";});
 });
-// D3js starts here
-//This data should be the data events from firebase. Have to figure out how to get this data
-var data = [{"name":"Study for CS306","hours": 4},{"name":"Learn React","hours": 5}, {"name":"HW5","hours": 2}];
-
-var width = 420,
-    barHeight = 20;
-
-var x = d3.scale.linear()
-    .domain([0, d3.max(data)])
-    .range([0, width]);
-
-var chart = d3.select(".chart")
-    .attr("width", width)
-    .attr("height", barHeight * data.length);
-
-var bar = chart.selectAll("g")
-    .data(data)
-    .enter().append("g")
-    .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
-
-bar.append("rect")
-    .attr("width", function(d){ return d.hours*60;})
-    .attr("height", barHeight - 1);
-
-bar.append("text")
-    .attr("x", function(d,i) { return d.hours*60 - 3; })
-    .attr("y", barHeight / 2)
-    .attr("dy", ".35em")
-    .text(function(d) { return d.name + " for " + d.hours + "hrs";});
 
 // Jasmine starts here
 describe('EventBox', function () {
