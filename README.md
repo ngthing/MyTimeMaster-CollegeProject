@@ -1,7 +1,8 @@
 # MyTimeMaster
 A time management and planner application
 
-Demo available at: https://ngthing.github.io/MyTimeMaster/ 
+Demo available at: https://ngthing.github.io/MyTimeMaster/
+Heroku: https://afternoon-reef-38020.herokuapp.com/ 
 
 Note: This project is in process. Demo has not yet fully reflected the App's description below. 
 
