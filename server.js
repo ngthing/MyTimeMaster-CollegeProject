@@ -12,7 +12,7 @@ var app = http.createServer(function(req,res){
 var port = Number(process.env.PORT || 3000);
 app.listen(port);
 
-app.use(express.static('public')); // App load static files e.i. html, css, js
+//app.use(express.static('public')); // App load static files e.i. html, css, js
 
 
 // var gcloud = require('google-cloud');
