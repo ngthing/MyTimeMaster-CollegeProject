@@ -2,6 +2,8 @@
  * Created by thinguyen on 10/27/16.
  */
 var http = require('http');
+var express = require('express');
+
 var app = http.createServer(function(req,res){
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end('<h1>Hello from MyTimeMaster</h1>');
@@ -12,7 +14,7 @@ app.listen(port);
 
 app.use(express.static('public')); // App load static files e.i. html, css, js
 
-// var express = require('express');
+
 // var gcloud = require('google-cloud');
 // var firebase = require('firebase');
 // var multer = require("multer");
