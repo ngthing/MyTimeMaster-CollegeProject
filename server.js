@@ -1,9 +1,11 @@
 /**
  * Created by thinguyen on 10/27/16.
  */
-var http = require('http');
 var express = require('express');
-var firebase = require("firebase");
+var firebase = require('firebase');
+var multer = require("multer");
+var gcloud = require('google-cloud');
+
 var app = express();
 var port = Number(process.env.PORT || 3000);
 var counter = 0;
