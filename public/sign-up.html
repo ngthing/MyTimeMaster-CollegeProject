@@ -48,16 +48,24 @@
     <li class="right"><a id="profile" href="#"></a></li>
 
 </nav>
-<li>
+
+<body>
+
+
+<div>
     <h4>In Hurry? </h4>
     <fb:login-button data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="false" scope="public_profile,email" onlogin="checkLoginState();">
     </fb:login-button>
-</li>
-<div id="fb-root"></div>
 
-<body>
+    <h3>Want to upload a profile picture? </h3>
+    <form id="upPic" action="/uploadpic" method="post" enctype="multipart/form-data">
+        <input type="file" id="newFile" name="img" />
+        <input type="submit" value="Submit" />
+    </form>
+</div>
+
 <div id="container"></div>
-
+<div id="fb-root"></div>
 <script type="text/babel">
     "use strict";
     // Initialize Firebase
@@ -70,6 +78,19 @@
     };
     firebase.initializeApp(config);
 
+    $('#upPic').submit(function(e)
+    {
+        e.preventDefault();
+        var formData = new FormData($("#upPic")[0]);
+        console.log(formData);
+        $.ajax({
+            type: "POST",
+            url: "/profile-pic",
+            data: formData,processData: false,
+            contentType: false
+
+        });
+    });
     var UserList = React.createClass({
         render: function () {
             var _this = this; //In the subcomponent, "this" will refer to window, so need to save "this" here
