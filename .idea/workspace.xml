@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="31dd8c0c-04ba-4dce-a612-caea4f4b7a54" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server.js" afterPath="$PROJECT_DIR$/server.js" />
-    </list>
+    <list default="true" id="31dd8c0c-04ba-4dce-a612-caea4f4b7a54" name="Default" comment="" />
     <ignored path="MyTimeMaster.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -281,7 +278,7 @@
       <workItem from="1476958742032" duration="10304000" />
       <workItem from="1477494338760" duration="5299000" />
       <workItem from="1477533468458" duration="79000" />
-      <workItem from="1477567529499" duration="9604000" />
+      <workItem from="1477567529499" duration="9829000" />
     </task>
     <task id="LOCAL-00001" summary="HW3">
       <created>1474951041270</created>
@@ -364,7 +361,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="99429000" />
+    <option name="totallyTimeSpent" value="99654000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="504" y="23" width="822" height="711" extended-state="0" />
