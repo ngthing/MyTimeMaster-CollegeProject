@@ -2,7 +2,7 @@
 A time management and planner application
 
 Demo available at: https://ngthing.github.io/MyTimeMaster/
-Heroku: https://afternoon-reef-38020.herokuapp.com/ 
+Heroku: https://afternoon-reef-38020.herokuapp.com/index.html 
 
 Note: This project is in process. Demo has not yet fully reflected the App's description below. 
 
