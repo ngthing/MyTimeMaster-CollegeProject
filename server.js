@@ -15,6 +15,17 @@ firebase.initializeApp({
     databaseURL: "https://mytimemaster.firebaseio.com"
 });
 var fireRef = firebase.database().ref('eventsBox');
+app.post('/event', function(req, res){
+    console.log("event " +req.body.name);
+    // fireRef.push(req, function(){
+    //     res.send("ok!");
+    // }).catch(function(){
+    //     res.status(403);
+    //     res.send();
+    //
+    // });
+
+});
 /**
  * Google cloud storage part
  */
@@ -23,6 +34,7 @@ var gcs = gcloud.storage({
     projectId: '17686327988', //from storage console, then click settings, then "x-goog-project-id"
     keyFilename: 'MyTimeMaster-07379faeb028.json' //the key we already set up
 });
+var fireRef = firebase.database().ref('eventsBox');
 
 function getPublicUrl (filename) {
     return 'https://storage.googleapis.com/' + CLOUD_BUCKET + '/' + filename;
@@ -66,9 +78,12 @@ function sendUploadToGCS (req, res, next) {
 // Process uploaded pic
 app.post('/pic', uploader.single("img"), sendUploadToGCS, function (req, res, next) {
     if(req.file)
+    {
         var imgurl = getPublicUrl(req.file.cloudStorageObject);
-    console.log("Img url at");
-    console.log(imgurl);
+        console.log("Img url at");
+        console.log(imgurl);
+        res.send(imgurl);
+    }
 
 });
 

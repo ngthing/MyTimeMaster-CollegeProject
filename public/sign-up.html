@@ -62,6 +62,7 @@
         <input type="file" id="newFile" name="img" />
         <input type="submit" value="Submit" />
     </form>
+    <p id="link"></p>
 </div>
 
 <div id="container"></div>
@@ -87,7 +88,12 @@
             type: "POST",
             url: "/pic",
             data: formData,processData: false,
-            contentType: false
+            contentType: false,
+            success: function (data, status)
+            {
+                alert("Upload successfully");
+                $("#link").text(data);
+            }
 
         });
     });

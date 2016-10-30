@@ -40,7 +40,7 @@ var EventForm = React.createClass({
         var hours = this.refs.hours.value;
         this.props.onEventSubmit({name: name, hours: hours});
         this.refs.name.value = '';
-        this.refs.hours.value = '';
+        this.refs.hours.value = ''
     },
     render: function() {
         return (
@@ -59,7 +59,19 @@ var EventBox = React.createClass({
 
     handleEventSubmit: function(event) {
         // Here we push the update out to Firebase and let ReactFire update this.state.data
-        this.firebaseRefs['data'].push(event);
+        // console.log("event.name" +event.name);
+        // console.log("event.hours" +event.hours);
+        // this.firebaseRefs['data'].push(event);
+        $.ajax({
+            type: "POST",
+            url: "/event",
+            data: {name: event.name, hours: event.hours} ,
+            processData: false,
+            contentType: false
+
+        });
+        console.log("event.name " +event.name);
+        console.log("event.hours " +event.hours);
     },
 
     getInitialState: function() {
@@ -97,8 +109,6 @@ var data = [];
 eventsBoxRef.on('value', function(snapshot) {
     snapshot.forEach(function(childSnapshot) {
         var childData = childSnapshot.val();
-        console.log("print child");
-        console.log(childData);
         data.push(childData);
     });
     var width = 420,
@@ -129,6 +139,7 @@ eventsBoxRef.on('value', function(snapshot) {
 });
 
 // Jasmine starts here
+/*
 describe('EventBox', function () {
     var TestUtils = React.addons.TestUtils;
     var eventBoxComponent, element, renderedDOM;
@@ -180,3 +191,4 @@ describe('EventBox', function () {
      });
 
 });
+*/
