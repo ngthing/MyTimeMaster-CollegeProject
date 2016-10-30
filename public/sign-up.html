@@ -58,7 +58,7 @@
     </fb:login-button>
 
     <h3>Want to upload a profile picture? </h3>
-    <form id="upPic" action="/uploadpic" method="post" enctype="multipart/form-data">
+    <form id="upPic" action="/pic" method="post" enctype="multipart/form-data">
         <input type="file" id="newFile" name="img" />
         <input type="submit" value="Submit" />
     </form>
@@ -85,7 +85,7 @@
         console.log(formData);
         $.ajax({
             type: "POST",
-            url: "/profile-pic",
+            url: "/pic",
             data: formData,processData: false,
             contentType: false
 

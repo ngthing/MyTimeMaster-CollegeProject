@@ -5,7 +5,7 @@ var express = require('express');
 var firebase = require('firebase');
 var multer = require("multer");
 var gcloud = require('google-cloud');
-
+var uploader = multer({ storage: multer.memoryStorage({}) });
 var app = express();
 var port = Number(process.env.PORT || 3000);
 
@@ -14,7 +14,7 @@ firebase.initializeApp({
     serviceAccount: "MyTimeMaster-07379faeb028.json",
     databaseURL: "https://mytimemaster.firebaseio.com"
 });
-
+var fireRef = firebase.database().ref('eventsBox');
 /**
  * Google cloud storage part
  */
@@ -63,7 +63,19 @@ function sendUploadToGCS (req, res, next) {
     stream.end(req.file.buffer);
 }
 
-app.listen(port);
+// Process uploaded pic
+app.post('/pic', uploader.single("img"), sendUploadToGCS, function (req, res, next) {
+    if(req.file)
+        var imgurl = getPublicUrl(req.file.cloudStorageObject);
+    console.log("Img url at");
+    console.log(imgurl);
+
+});
+
+app.listen(port, function () {
+    console.log('App listening on port %s', port);
+    console.log('Press Ctrl+C to quit.');
+});
 
 app.use(express.static('public')); // App load static files e.i. html, css, js
 
