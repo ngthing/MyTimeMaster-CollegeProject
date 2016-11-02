@@ -5,6 +5,7 @@ var express = require('express');
 var firebase = require('firebase');
 var multer = require("multer");
 var gcloud = require('google-cloud');
+var bodyParser = require('body-parser');
 var uploader = multer({ storage: multer.memoryStorage({}) });
 var app = express();
 var port = Number(process.env.PORT || 3000);
@@ -14,18 +15,19 @@ firebase.initializeApp({
     serviceAccount: "MyTimeMaster-07379faeb028.json",
     databaseURL: "https://mytimemaster.firebaseio.com"
 });
+var urlencodedParser = bodyParser.urlencoded({extended: false});
 var fireRef = firebase.database().ref('eventsBox');
-app.post('/event', function(req, res){
-    console.log("event " +req.body.name);
-    // fireRef.push(req, function(){
-    //     res.send("ok!");
-    // }).catch(function(){
-    //     res.status(403);
-    //     res.send();
-    //
-    // });
+app.post('/event', urlencodedParser, function(req, res){
+    fireRef.push({"name":req.body.name, "hours" : req.body.hours}, function(){
+        res.send("ok!");
+    }).catch(function(){
+        res.status(403);
+        res.send();
 
+    });
 });
+
+
 /**
  * Google cloud storage part
  */

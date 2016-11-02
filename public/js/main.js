@@ -65,10 +65,7 @@ var EventBox = React.createClass({
         $.ajax({
             type: "POST",
             url: "/event",
-            data: {name: event.name, hours: event.hours} ,
-            processData: false,
-            contentType: false
-
+            data: {name: event.name, hours: event.hours},
         });
         console.log("event.name " +event.name);
         console.log("event.hours " +event.hours);
@@ -105,12 +102,14 @@ ReactDOM.render(
 // D3js for chart here
 // Get a database reference to our posts
 var eventsBoxRef = firebase.database().ref('eventsBox');
-var data = [];
+
 eventsBoxRef.on('value', function(snapshot) {
+    var data = [];
     snapshot.forEach(function(childSnapshot) {
         var childData = childSnapshot.val();
         data.push(childData);
     });
+    console.log(data);
     var width = 420,
         barHeight = 20;
 
@@ -138,57 +137,3 @@ eventsBoxRef.on('value', function(snapshot) {
         .text(function(d) { return d.name + " for " + d.hours + "hrs";});
 });
 
-// Jasmine starts here
-/*
-describe('EventBox', function () {
-    var TestUtils = React.addons.TestUtils;
-    var eventBoxComponent, element, renderedDOM;
-    beforeEach(function (done) {
-        element = React.createElement(EventBox);
-        eventBoxComponent = TestUtils.renderIntoDocument(element);
-        eventBoxComponent.setState({items: [{text: "testItem"}]}, done);
-    });
-    it("Has a Save button", function () {
-        let buttons = TestUtils.scryRenderedDOMComponentsWithTag(eventBoxComponent, "input");
-        expect(inputs[3]).not.toBeUndefined();
-        expect(inputs[3].innerHTML).toBe("Save");
-    });
-    it("Has a EventList component", function () {
-        expect(function () {
-            TestUtils.findRenderedComponentWithType(eventBoxComponent, EventList);
-        }).not.toThrow();
-    });
-    it("Has a EventForm component", function () {
-        expect(function () {
-            TestUtils.findRenderedComponentWithType(eventBoxComponent, EventForm);
-        }).not.toThrow();
-    });
-    describe("Save event button", function () {
-        beforeEach(function () {
-            spyOn(eventBoxComponent.fireRef, "push");
-        });
-        it("Causes fireBase push to be called", function () {
-            let inputSave = TestUtils.scryRenderedDOMComponentsWithTag(eventBoxComponent, "input")[3];
-            TestUtils.Simulate.click(inputSave);
-            expect(eventBoxComponent.fireRef.push).toHaveBeenCalledWith({});
-        });
-    });
-    describe("EventList", function () {
-        var eventListComponent;
-        beforeEach(function(){
-            eventListComponent = TestUtils.findRenderedComponentWithType(eventBoxComponent, EventList);
-        });
-        it("Updates firebase when text is changed", function(){
-            var setSpy;
-            setSpy = jasmine.createSpy("set");
-            spyOn(eventBoxComponent.fireRef, "child").and.returnValue({set : setSpy});
-            var inputs = TestUtils.scryRenderedDOMComponentsWithTag(eventBoxComponent,"input");
-            inputs[0].value = "try";
-            TestUtils.Simulate.change(inputs[0]);
-            expect(eventBoxComponent.fireRef.child).toHaveBeenCalled();
-            expect(setSpy).toHaveBeenCalledWith({text: "try"});
-        });
-     });
-
-});
-*/
