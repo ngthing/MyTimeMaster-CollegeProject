@@ -16,14 +16,23 @@ firebase.initializeApp({
     databaseURL: "https://mytimemaster.firebaseio.com"
 });
 var urlencodedParser = bodyParser.urlencoded({extended: false});
-var fireRef = firebase.database().ref('eventsBox');
-app.post('/event', urlencodedParser, function(req, res){
-    fireRef.push({"name":req.body.name, "hours" : req.body.hours}, function(){
-        res.send("ok!");
-    }).catch(function(){
-        res.status(403);
-        res.send();
+var fireRef = firebase.database().ref('users');
 
+//Create a new event
+app.post('/event', urlencodedParser, function(req, res){
+    console.log("New req");
+    console.log("Client wants to create event: '" + req.body.name + "'");
+    console.log("Token: " + req.body.token);
+    var idToken = req.body.token;
+    firebase.auth().verifyIdToken(idToken).then(function (decodedToken) {
+        var uid = decodedToken.uid;
+        console.log("uid" + uid);
+        fireRef.child(uid).push({"name":req.body.name, "hours" : req.body.hours}, function(){
+            res.send("ok!");
+        }).catch(function() {
+            res.status(403);
+            res.send();
+        });
     });
 });
 
