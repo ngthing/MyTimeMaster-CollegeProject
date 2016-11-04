@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    html, body {
+        marigin: 20px;
+        padding: 0px;
+        font-family: Verdana, Geneva, sans-serif;
+        text-align: center;
+        background-color: aliceblue;
+
+    }
+</style>
+
+<title>MyTimeMaster</title>
+<style>
+    body{
+        magrin-top: 30px;
+        background-color: aliceblue;
+
+    }
+    a.delete{
+        color: red;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!--Add Jquery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Customed CSS file -->
+    <link rel="stylesheet" type="text/css" href="static-files/css/signin-style.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- Super important: use react with addons!!! -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-with-addons.js"></script>
+    <script src="https://fb.me/react-dom-15.0.0.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+    <!-- ReactFire -->
+    <script src="https://cdn.firebase.com/libs/reactfire/1.0.0/reactfire.min.js"></script>
+    <!--jasmine-->
+    <script type="text/javascript" src="../jasmine/lib/jasmine-2.5.2/jasmine.js"></script>
+    <script type="text/javascript" src="../jasmine/lib/jasmine-2.5.2/jasmine-html.js"></script>
+    <script type="text/javascript" src="../jasmine/lib/jasmine-2.5.2/boot.js"></script>
+    <link rel="stylesheet" type="text/css" href="../jasmine/lib/jasmine-2.5.2/jasmine.css">
+
+
+</head>
+
+<body>
+<nav>
+    <li><a class="active" href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="#">Contact</a></li>
+    <li class="right"><a href="#">Welcome!</a></li>
+
+</nav>
+
+<div id="container">
+    <!-- This element's contents will be replaced with your component. -->
+</div>
+<script type="text/babel">
+    "use strict";
+    var config = {
+        apiKey: "AIzaSyAWoy65K87hcXNTgbcW_wRa9-Sw3zwHi70",
+        authDomain: "mytimemaster.firebaseapp.com",
+        databaseURL: "https://mytimemaster.firebaseio.com",
+        storageBucket: "mytimemaster.appspot.com",
+        messagingSenderId: "17686327988"
+    };
+
+    firebase.initializeApp(config);
+
+    var TodoList = React.createClass({
+        render: function () {
+            var _this = this; //In the subcomponent, "this" will refer to window, so need to save "this" here
+            var createItem = function (item, key) {
+                return (<div key={key}><input type="text" onChange={_this.props.onChange.bind(null, item['.key'])}
+                                              value={item.text}/>
+                    <button onClick={_this.props.removeItem.bind(null, item['.key'])}>&#x2716;</button>
+                </div>);
+            };
+            if(this.props.items == null)
+                return <ul></ul>;
+            else
+                return <ul>{this.props.items.map(createItem)}</ul>;
+        }
+    });
+    var TodoApp = React.createClass({
+        mixins: [ReactFireMixin],
+        getInitialState: function () {
+            return {items: []};
+        },
+        componentWillMount: function () {
+            this.fireRef = firebase.database().ref('todos');
+
+            this.bindAsArray(this.fireRef, "items");
+        },
+        onChange: function (fireKey, event) {
+            this.fireRef.child(fireKey).set({"text": event.target.value});
+        },
+        removeItem: function (key) {
+            this.fireRef.child(key).remove();
+        },
+
+        handleAdd: function (e) {
+            this.fireRef.push({"text": ""});
+        },
+        render: function () {
+            return (
+                    <div>
+                        <h3>Let's Start to create events!</h3>
+                        <TodoList items={this.state.items} removeItem={this.removeItem} onChange={this.onChange}/>
+                        <button onClick={this.handleAdd}>New</button>
+                    </div>
+            );
+        }
+    });
+
+    ReactDOM.render(<TodoApp />, document.getElementById('container'));
+
+    describe('TodoApp', function () {
+        var TestUtils = React.addons.TestUtils;
+        var todoAppComponent, element, renderedDOM;
+        beforeEach(function (done) {
+            element = React.createElement(TodoApp);
+            todoAppComponent = TestUtils.renderIntoDocument(element);
+            todoAppComponent.setState({items: [{text: "testItem"}]}, done);
+        });
+        it("Has a new button", function () {
+            let buttons = TestUtils.scryRenderedDOMComponentsWithTag(todoAppComponent, "button");
+            expect(buttons[1]).not.toBeUndefined();
+            expect(buttons[1].innerHTML).toBe("New");
+        });
+        it("Has a TodoList component", function () {
+            expect(function () {
+                TestUtils.findRenderedComponentWithType(todoAppComponent, TodoList);
+            }).not.toThrow();
+        });
+        describe("New item button", function () {
+            beforeEach(function () {
+                spyOn(todoAppComponent.fireRef, "push");
+            });
+            it("Causes fireBase push to be called", function () {
+                let button = TestUtils.scryRenderedDOMComponentsWithTag(todoAppComponent, "button")[1];
+                TestUtils.Simulate.click(button);
+                expect(todoAppComponent.fireRef.push).toHaveBeenCalledWith({"text": ""});
+            });
+        });
+        describe("TodoList", function () {
+            var todoListComponent;
+            beforeEach(function(){
+                 todoListComponent = TestUtils.findRenderedComponentWithType(todoAppComponent, TodoList);
+            });
+
+            it("Updates firebase when text is changed", function(){
+                var setSpy;
+                setSpy = jasmine.createSpy("set");
+                spyOn(todoAppComponent.fireRef, "child").and.returnValue({set : setSpy});
+                var inputs = TestUtils.scryRenderedDOMComponentsWithTag(todoListComponent,"input");
+                inputs[0].value = "asdf";
+                TestUtils.Simulate.change(inputs[0]);
+                expect(todoAppComponent.fireRef.child).toHaveBeenCalled();
+                expect(setSpy).toHaveBeenCalledWith({text: "asdf"});
+            });
+
+            it("Removes items from firebase when delete is clicked", function(){
+                var deleteSpy;
+                deleteSpy = jasmine.createSpy("remove");
+                spyOn(todoAppComponent.fireRef, "child").and.returnValue({remove : deleteSpy});
+                var deleteButtons = TestUtils.scryRenderedDOMComponentsWithTag(todoListComponent,"button");
+                TestUtils.Simulate.click(deleteButtons[0]);
+                expect(todoAppComponent.fireRef.child).toHaveBeenCalled();
+                expect(deleteSpy).toHaveBeenCalled();
+            });
+        });
+
+    });
+
+</script>
+</body>
+</html>
