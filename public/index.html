@@ -1,0 +1,89 @@
+<!-- This is the homepage. It introduces about the application - allow user to navigate to other pages e.g. to login page, to user's profide page, and to get-user-input-page, etc.  -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <title>MyTimeMaster</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- Customed CSS file -->
+	<link rel="stylesheet" type="text/css" href="css/homepage-style.css">
+    <!-- Super important: use react with addons!!! -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-with-addons.js"></script>
+    <script src="https://fb.me/react-dom-15.0.0.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.css" />
+    <!-- ReactFire -->
+    <script src="https://cdn.firebase.com/libs/reactfire/1.0.0/reactfire.min.js"></script>
+
+    <!-- throw-in-the-towel -->
+    <script src="https://unpkg.com/throw-in-the-towel@2"></script>
+
+    <!-- Markdown -->
+    <script src="https://unpkg.com/showdown@0.3.1"></script>
+
+    <!-- D3.js-->
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <!--&lt;!&ndash; Jasmine &ndash;&gt;-->
+    <!--<script type="text/javascript" src="../jasmine/lib/jasmine-2.5.2/jasmine.js"></script>-->
+    <!--<script type="text/javascript" src="../jasmine/lib/jasmine-2.5.2/jasmine-html.js"></script>-->
+    <!--<script type="text/javascript" src="../jasmine/lib/jasmine-2.5.2/boot.js"></script>-->
+    <!--<link rel="stylesheet" type="text/css" href="../jasmine/lib/jasmine-2.5.2/jasmine.css">-->
+</head>
+<body>
+
+<nav>
+  <li><a class="active" href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+  <li><a href="contact.html">Contact</a></li>
+  <li class="right" id="signout"><a href="javascript:firebase.auth().signOut()">Sign Out</a></li>
+    <li class="right"><a href="#"><span id="sign-in-status"></span></a></li>
+</nav>
+<br/>
+<div class="text-center" id="intro">
+    <h1>Welcome to MyTimeMaster</h1>
+    <p>MyTimeMaster is a time management and planner application.<br/>
+        With MyTimeMaster app, a user can create a personal account <br/>
+        and use the app as a tool to plan and allocate their time daily/weekly/monthly</p>
+    <br/>
+    <p>Sign up/ Sign in now to start orginize your time.</p>
+    <div id="firebaseui-auth-container"></div>
+</div>
+
+
+<div id="pickDate">
+    <form action="">
+        <h2>Choose a date before 2018-01-01:</h2>
+        <input type="date" name="date" max="2017-12-31"><input type="submit">
+    </form>
+</div>
+<div id="content">
+    <!-- This element's contents will be replaced with your component. -->
+</div>
+
+<div id="footer">
+     <span id="account-details"></span>
+</div>
+
+
+<div id="chart">
+    <!-- This element's contents will be replaced with your component. -->
+    <h1>Today's Time Allocation</h1><br/>
+    <svg class="chart"></svg>
+
+</div>
+
+<!-- Custom JS -->
+<script type="text/babel" src="js/main.js"></script>
+
+
+</body>
+</html>

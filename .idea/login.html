@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>React Facebook API Tutorial</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
+</head>
+<body>
+<div id="content"></div>
+<script type="text/babel">
+    var Post = React.createClass({
+        render: function() {
+            return (
+                    <div className="post">
+                        {this.props.post.message}
+                    </div>
+            );
+        },
+    });
+
+    var Page = React.createClass({
+        getInitialState: function() {
+            return {posts: []};
+        },
+        componentDidMount: function() {
+            var self = this;
+            FB.api('/Engineering/posts', {access_token: '165781817203603|875e7f1325c69b9b74805d9b82cad315'}, function(response) {
+                self.setState({posts: response.data});
+            });
+        },
+        render: function() {
+            return (
+                    <div className="page">
+                        {
+                            this.state.posts.map(function(post) {
+                                return <Post key={post.id} post={post} />;
+                            })
+                        }
+                    </div>
+            );
+        }
+    });
+
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId: '165781817203603',
+            cookie: true,
+            xfbml: true,
+            version: 'v2.5',
+        });
+
+        ReactDOM.render(
+                <Page />,
+                document.getElementById('content')
+        );
+    };
+
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+</script>
+</body>
+</html>
