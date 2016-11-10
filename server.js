@@ -36,6 +36,24 @@ app.post('/event', urlencodedParser, function(req, res){
     });
 });
 
+// Delete an event
+app.delete('/event', urlencodedParser, function (req, res) {
+    console.log("New req");
+    console.log("Client wants to delete event: '" + req.body.name + "'");
+    console.log("Token: " + req.body.token);
+    console.log("key: " + req.body.key);
+
+    var idToken = req.body.token;
+    firebase.auth().verifyIdToken(idToken).then(function (decodedToken) {
+        var uid = decodedToken.uid;
+        fireRef.child(uid).child(req.body.key).once("value", function (event) {
+                fireRef.child(uid).child(req.body.key).remove();
+                res.send("OK!");
+        }).catch(function () {
+            res.status(403);
+        });
+    });
+});
 
 /**
  * Google cloud storage part
