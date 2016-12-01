@@ -28,7 +28,7 @@ html, body{
     background-color: aliceblue;
 }
 
-h1 {
+h1, h2 {
     color: navy;
     text-align: center;
 }
@@ -41,6 +41,7 @@ article {
     filter: alpha(opacity=60); /* For IE8 and earlier */
     border-radius: 25px;
 }
+
 nav {
     list-style-type: none;
     margin: 0;
