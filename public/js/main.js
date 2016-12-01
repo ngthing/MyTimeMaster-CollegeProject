@@ -101,52 +101,6 @@ firebase.auth().onAuthStateChanged(function(user) {
             //     providerData: providerData
             // }, null, '  ');
         });
-/*
-        // Get a database reference to our posts
-        var eventsBoxRef = firebase.database().ref('eventsBox').child(userName);
-        // Get today date - default date to show time allocation chart
-       //  var pickedDate = getToday();
-       // // function getTimeChartByDate(eventsBoxRef,pickedDate);
-       //  $(document).ready(function(){
-       //      $("#filterDate").change(function(){
-       //          pickedDate = $("#filterDate").val();
-       //      });
-       //  });
-        eventsBoxRef.on('value', function(snapshot) {
-            var data = [];
-            snapshot.forEach(function(childSnapshot) {
-                var childData = childSnapshot.val();
-                // console.log("childdata " + childData);
-                // console.log("pickedDate " + pickedDate);
-                data.push(childData);
-            });
-            var width = 2400,
-                barHeight = 20;
-
-            var x = d3.scale.linear()
-                .domain([0, d3.max(data)])
-                .range([0, width]);
-
-            var chart = d3.select(".chart")
-                .attr("width", width)
-                .attr("height", barHeight * data.length);
-
-            var bar = chart.selectAll("g")
-                .data(data)
-                .enter().append("g")
-                .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
-
-            bar.append("rect")
-                .attr("width", function(d){ return d.hours*50;})
-                .attr("height", barHeight - 1);
-
-            bar.append("text")
-                .attr("x", function(d,i) { return d.hours*50 - 3; })
-                .attr("y", barHeight / 2)
-                .attr("dy", ".35em")
-                .text(function(d) { return d.name + " - " + d.hours + "hrs";});
-        });
-*/
     } else {
         // User is signed out.
         $("#sign-in-status").hide();
@@ -255,9 +209,7 @@ var EventBox = React.createClass({
 
     handleEventSubmit: function(event) {
         // Here we push the update out to Firebase and let ReactFire update this.state.data
-        // console.log("event.name" +event.name);
-        // console.log("event.hours" +event.hours);
-        // this.firebaseRefs['data'].push(event);
+
         var pickedDate = this.state.filterDate;
         firebase.auth().currentUser.getToken().then(function(idToken) {
             $.ajax({
@@ -283,13 +235,6 @@ var EventBox = React.createClass({
     componentWillMount: function() {
         // Here we bind the component to Firebase and it handles all data updates,
         // no need to poll as in the React example.
-        // console.log("data sent to firebase " + data);
-        // this.fireRef = firebase.database().ref('users').child(userName);
-        // this.bindAsArray(this.fireRef, "items");
-        // this.fireRef = firebase.database().ref('users').child(userName);
-        //  this.bindAsArray(firebase.database().ref('eventsBox'), 'data');
-        //  this.bindAsArray(this.fireRef.ref('eventsBox'), 'data');
-        // this.bindAsArray(this.fireRef, 'data');
         console.log("Looking for userName: " + userName);
         this.bindAsArray(firebase.database().ref('eventsBox').child(userName), 'data');
         console.log(firebase.database().ref('eventsBox').child(userName).once("value",function(val){
@@ -324,35 +269,9 @@ var EventBox = React.createClass({
         $('#pickedDateForChart').text(todayToShow);
     this.setState({filterDate: todayToStoreInFB});
 
-        // var chart = d3.select(".chart");
-        // // d3.select(".chart").selectAll("g").remove();
-        // var width = 2400,
-        //     barHeight = 20;
-        //
-        // var x = d3.scale.linear()
-        //     .domain([0, d3.max(data)])
-        //     .range([0, width]);
-        //
-        // var chart = d3.select(".chart")
-        //     .attr("width", width)
-        //     .attr("height", barHeight * data.length);
-        //
-        // var bar = chart.selectAll("g")
-        //     .data([{name:"Test",hours:5}])
-        //     .enter().append("g")
-        //     .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
-        //
-        // bar.append("rect")
-        //     .attr("width", function(d){ return d.hours*50;})
-        //     .attr("height", barHeight - 1);
-        //
-        // bar.append("text")
-        //     .attr("x", function(d,i) { return d.hours*50 - 3; })
-        //     .attr("y", barHeight / 2)
-        //     .attr("dy", ".35em")
-        //     .text(function(d) { return d.name + " - " + d.hours + "hrs";});
-        // console.log("Drew chart");
-        // console.log("OK");
+        var chart = d3.select(".chart");
+        // Remove the old chart
+        d3.select(".chart").selectAll("g").remove();
         var eventsBoxRef = firebase.database().ref('eventsBox').child(userName);
         eventsBoxRef.on('value', function(snapshot) {
             var data = [];
@@ -365,6 +284,9 @@ var EventBox = React.createClass({
                     data.push(childData);
                 }
             });
+            var i = 0;
+            for (i = 0; i< data.length ; i++)
+            { console.log(data[i].name);}
             var width = 2400,
                 barHeight = 20;
 
