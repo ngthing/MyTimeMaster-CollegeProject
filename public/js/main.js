@@ -10,7 +10,66 @@ var config = {
     messagingSenderId: "17686327988"
 };
 firebase.initializeApp(config);
-// var converter = new Showdown.converter();
+// Global var
+var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+//Helpful functions
+function getToday(){
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if(dd<10) {
+        dd='0'+dd
+    }
+
+    if(mm<10) {
+        mm='0'+mm
+    }
+    today = mm+'-'+dd+'-'+ yyyy;
+    return today;
+}
+// D3js for chart here
+/*
+function getTimeChartByDate(eventsBoxRef, date) {
+    eventsBoxRef.on('value', function(snapshot) {
+        var data = [];
+        snapshot.forEach(function(childSnapshot) {
+            var childData = childSnapshot.val();
+            console.log("childdata " + childData);
+            console.log("pickedDate " + pickedDate);
+            data.push(childData);
+        });
+        // console.log("data " +data);
+        var width = 420,
+            barHeight = 20;
+
+        var x = d3.scale.linear()
+            .domain([0, d3.max(data)])
+            .range([0, width]);
+
+        var chart = d3.select(".chart")
+            .attr("width", width)
+            .attr("height", barHeight * data.length);
+
+        var bar = chart.selectAll("g")
+            .data(data)
+            .enter().append("g")
+            .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
+
+        bar.append("rect")
+            .attr("width", function(d){ return d.hours*100;})
+            .attr("height", barHeight - 1);
+
+        bar.append("text")
+            .attr("x", function(d,i) { return d.hours*100 - d.hours*10; })
+            .attr("y", barHeight / 2)
+            .attr("dy", ".35em")
+            .text(function(d) { return d.name + " for " + d.hours + "hrs";});
+    });
+    return;
+}*/
 var userName;
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
@@ -42,20 +101,26 @@ firebase.auth().onAuthStateChanged(function(user) {
             //     providerData: providerData
             // }, null, '  ');
         });
-
-        // document.getElementById('account-details').hide();
-        // D3js for chart here
-// Get a database reference to our posts
+/*
+        // Get a database reference to our posts
         var eventsBoxRef = firebase.database().ref('eventsBox').child(userName);
-
+        // Get today date - default date to show time allocation chart
+       //  var pickedDate = getToday();
+       // // function getTimeChartByDate(eventsBoxRef,pickedDate);
+       //  $(document).ready(function(){
+       //      $("#filterDate").change(function(){
+       //          pickedDate = $("#filterDate").val();
+       //      });
+       //  });
         eventsBoxRef.on('value', function(snapshot) {
             var data = [];
             snapshot.forEach(function(childSnapshot) {
                 var childData = childSnapshot.val();
+                // console.log("childdata " + childData);
+                // console.log("pickedDate " + pickedDate);
                 data.push(childData);
             });
-            // console.log("data " +data);
-            var width = 420,
+            var width = 2400,
                 barHeight = 20;
 
             var x = d3.scale.linear()
@@ -72,17 +137,16 @@ firebase.auth().onAuthStateChanged(function(user) {
                 .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
 
             bar.append("rect")
-                .attr("width", function(d){ return d.hours*100;})
+                .attr("width", function(d){ return d.hours*50;})
                 .attr("height", barHeight - 1);
 
             bar.append("text")
-                .attr("x", function(d,i) { return d.hours*100 - d.hours*10; })
+                .attr("x", function(d,i) { return d.hours*50 - 3; })
                 .attr("y", barHeight / 2)
                 .attr("dy", ".35em")
-                .text(function(d) { return d.name + " for " + d.hours + "hrs";});
+                .text(function(d) { return d.name + " - " + d.hours + "hrs";});
         });
-
-
+*/
     } else {
         // User is signed out.
         $("#sign-in-status").hide();
@@ -94,10 +158,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                 // Leave the lines as is for the providers you want to offer your users.
 
                 firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-            // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-//            firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-//            firebase.auth.GithubAuthProvider.PROVIDER_ID,
-//                    firebase.auth.EmailAuthProvider.PROVIDER_ID
+                // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+                // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+                // firebase.auth.GithubAuthProvider.PROVIDER_ID,
+                // firebase.auth.EmailAuthProvider.PROVIDER_ID
             ],
             // Terms of service url.
             'tosUrl': '<your-tos-url>',
@@ -124,7 +188,8 @@ var Event = React.createClass({
         //onClick={this.props.event.removeEvent.bind(null, this.props.event['.key'])}
         return (
             <div className='event'>
-                <h4 className='name'><button onClick={this.props.delEvent.bind(null, this.props.event['.key'])}>&#x2716;</button>
+                <h4 className='name'>
+                    <button className="btn btn-danger btn-xs" onClick={this.props.delEvent.bind(null, this.props.event['.key'])}>&#x2716;</button>
                     {this.props.event.name}. For: {this.props.event.hours} hours.
                 </h4>
 
@@ -137,10 +202,11 @@ var Event = React.createClass({
 var EventList = React.createClass({
     render: function() {
         var removeEvent= this.props.removeEvent;
+        var filterDate = this.props.filterDate;
         var eventNodes = this.props.data.filter(function(value){
             // console.log("Comparing "  + " with");
             // console.log(value);
-            //Only include those that are 1 hour
+            // //Only include those that are 1 hour
             // if(value.hours == 1)
             //     return true;
             // else
@@ -148,7 +214,13 @@ var EventList = React.createClass({
             //     console.log("Filter " + value.hours);
             //     return false;
             // }
-            return true
+            console.log("Get events only on " + filterDate);
+            if (value.date == filterDate)
+                return true;
+            else
+                return false;
+            //return true;
+
         }).map(function (event, index) {
             return <Event index={index} event={event} delEvent={removeEvent}></Event>;
         });
@@ -173,7 +245,7 @@ var EventForm = React.createClass({
                 <input type='text' placeholder='Event name' ref='name' required/>
                 <br/>Duration (in hours):
                 <input type="number" ref="hours" min="0.25" max="10" step="any" placeholder='min 0.25 - max 10' required />
-                <br/><input type='submit' value='Save' />
+                <br/><input type='submit' className="btn btn-info btn-sm" value='Save' />
             </form>
         );
     }
@@ -186,14 +258,17 @@ var EventBox = React.createClass({
         // console.log("event.name" +event.name);
         // console.log("event.hours" +event.hours);
         // this.firebaseRefs['data'].push(event);
+        var pickedDate = this.state.filterDate;
         firebase.auth().currentUser.getToken().then(function(idToken) {
             $.ajax({
                 type: "POST",
                 url: "/event",
-                data: {name: event.name, hours: event.hours, token: idToken},
+                data: {name: event.name, hours: event.hours, date: pickedDate,token: idToken},
             });
         });
+
         console.log("Date: " + this.state.filterDate);
+        //console.log("pickedDate: " + pickedDate);
         console.log("event.name " +event.name);
         console.log("event.hours " +event.hours);
     },
@@ -201,7 +276,7 @@ var EventBox = React.createClass({
     getInitialState: function() {
         return {
             data: [],
-            filterDate: null
+            filterDate: getToday(),
         };
     },
 
@@ -219,8 +294,113 @@ var EventBox = React.createClass({
         this.bindAsArray(firebase.database().ref('eventsBox').child(userName), 'data');
         console.log(firebase.database().ref('eventsBox').child(userName).once("value",function(val){
         }));
+
     },
-    removeEvent: function (key) {
+    componentDidMount :function(){
+        $('#inlineDatepicker').datepick({onSelect: this.showDate});
+    },
+    showDate: function(date) {
+    // alert('The date chosen is ' + date);
+    var pickedDate = $('#inlineDatepicker').datepick('getDate')[0];
+    console.log(pickedDate);
+    var dd = pickedDate.getDate();
+    var mm = pickedDate.getMonth()+1; //January is 0!
+    var yyyy = pickedDate.getFullYear();
+    var month = months[mm-1]
+    var day = days[ pickedDate.getDay() ];
+
+    if(dd<10) {
+        dd='0'+dd
+    }
+
+    if(mm<10) {
+        mm='0'+mm
+    }
+    var todayToStoreInFB = mm+'-'+dd+'-'+ yyyy;
+    console.log(todayToStoreInFB);
+    var todayToShow = day + ', ' + month + ' ' + dd +', ' +yyyy;
+    $('#printDate').text(todayToShow);
+        $('#pickedDate').text(todayToShow);
+        $('#pickedDateForChart').text(todayToShow);
+    this.setState({filterDate: todayToStoreInFB});
+
+        // var chart = d3.select(".chart");
+        // // d3.select(".chart").selectAll("g").remove();
+        // var width = 2400,
+        //     barHeight = 20;
+        //
+        // var x = d3.scale.linear()
+        //     .domain([0, d3.max(data)])
+        //     .range([0, width]);
+        //
+        // var chart = d3.select(".chart")
+        //     .attr("width", width)
+        //     .attr("height", barHeight * data.length);
+        //
+        // var bar = chart.selectAll("g")
+        //     .data([{name:"Test",hours:5}])
+        //     .enter().append("g")
+        //     .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
+        //
+        // bar.append("rect")
+        //     .attr("width", function(d){ return d.hours*50;})
+        //     .attr("height", barHeight - 1);
+        //
+        // bar.append("text")
+        //     .attr("x", function(d,i) { return d.hours*50 - 3; })
+        //     .attr("y", barHeight / 2)
+        //     .attr("dy", ".35em")
+        //     .text(function(d) { return d.name + " - " + d.hours + "hrs";});
+        // console.log("Drew chart");
+        // console.log("OK");
+        var eventsBoxRef = firebase.database().ref('eventsBox').child(userName);
+        eventsBoxRef.on('value', function(snapshot) {
+            var data = [];
+            snapshot.forEach(function (childSnapshot) {
+                var childData = childSnapshot.val();
+                // console.log("childdata " + childData);
+                console.log("childData.date" + childData.date);
+                if (childData.date == todayToStoreInFB) {
+                    console.log("add " + childData.name);
+                    data.push(childData);
+                }
+            });
+            var width = 2400,
+                barHeight = 20;
+
+            var x = d3.scale.linear()
+                .domain([0, d3.max(data)])
+                .range([0, width]);
+
+            var chart = d3.select(".chart")
+                .attr("width", width)
+                .attr("height", barHeight * data.length);
+
+            var bar = chart.selectAll("g")
+                .data(data)
+                .enter().append("g")
+                .attr("transform", function (d, i) {
+                    return "translate(0," + i * barHeight + ")";
+                });
+
+            bar.append("rect")
+                .attr("width", function (d) {
+                    return d.hours * 50;
+                })
+                .attr("height", barHeight - 1);
+
+            bar.append("text")
+                .attr("x", function (d, i) {
+                    return d.hours * 50 - 3;
+                })
+                .attr("y", barHeight / 2)
+                .attr("dy", ".35em")
+                .text(function (d) {
+                    return d.name + " - " + d.hours + "hrs";
+                });
+        });
+},
+removeEvent: function (key) {
         firebase.auth().currentUser.getToken().then(function(idToken) {
             console.log("token" + idToken);
             $.ajax({
@@ -230,19 +410,37 @@ var EventBox = React.createClass({
             });
         });
     },
-    filterDate : function(dateToShow){
-        //set filterDAte to be the date that the user selected
+    /*
+    getFilterDate : function(){
+        //set filterDate to be the date that the user selected
         //FilterDate is used when new event is created to select what date to make
         //FilterDate is used in list render to
         //then call this.setstate(data...)
-    },
-
+        // $(function() {
+        //     $('#inlineDatepicker').datepick({onSelect: showDate});
+        // });
+        //
+        var pickedDate = $("#filterDate").val();
+        $("#pickedDate").text(pickedDate);
+        console.log("pickdate " + pickedDate);
+        this.setState({filterDate: pickedDate});
+        // console.log("date change detected");
+    },*/
     render: function() {
         return (
             <div className='eventBox'>
-                <h1>Your events today</h1>
-                <EventList data={this.state.data} removeEvent={this.removeEvent}/>
-                <EventForm onEventSubmit={this.handleEventSubmit} />
+                <div className="col-sm-5">
+                    <h2>Step1: Pick a date to create/view your events:</h2>
+                    <div id="inlineDatepicker"></div><br/>
+                    <h5>Current date: <span id="printDate"></span></h5>
+                </div>
+                <div className="col-sm-7">
+                    {/*<input id="filterDate" onChange={this.getFilterDate} type="date" name="date" max="2017-12-31" value={this.state.filterDate}/>*/}
+                    {/*<input id="printDates" onChange={this.getFilterDate} type='text' placeholder='date' value=""/>*/}
+                    <h1>Step2: Create/View your events on<br/> <span id="pickedDate">today</span></h1>
+                    <EventList data={this.state.data} removeEvent={this.removeEvent} filterDate={this.state.filterDate}/>
+                    <EventForm onEventSubmit={this.handleEventSubmit} />
+                </div>
             </div>
         );
     }

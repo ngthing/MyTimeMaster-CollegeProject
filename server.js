@@ -10,7 +10,6 @@ var uploader = multer({ storage: multer.memoryStorage({}) });
 var app = express();
 var port = Number(process.env.PORT || 3000);
 
-
 firebase.initializeApp({
     serviceAccount: "MyTimeMaster-07379faeb028.json",
     databaseURL: "https://mytimemaster.firebaseio.com"
@@ -26,8 +25,9 @@ app.post('/event', urlencodedParser, function(req, res){
     var idToken = req.body.token;
     firebase.auth().verifyIdToken(idToken).then(function (decodedToken) {
         var uid = decodedToken.uid;
-        console.log("uid" + uid);
-        fireRef.child(uid).push({"name":req.body.name, "hours" : req.body.hours}, function(){
+        console.log("uid " + uid);
+        console.log("date " + req.body.date);
+        fireRef.child(uid).push({"name":req.body.name, "hours" : req.body.hours, "date": req.body.date}, function(){
             res.send("ok!");
         }).catch(function() {
             res.status(403);
@@ -122,5 +122,4 @@ app.listen(port, function () {
 });
 
 app.use(express.static('public')); // App load static files e.i. html, css, js
-
 

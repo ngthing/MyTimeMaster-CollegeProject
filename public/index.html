@@ -32,6 +32,10 @@
 
     <!-- D3.js-->
     <script src="//d3js.org/d3.v3.min.js"></script>
+    <!-- DatePicker Library-->
+    <link href="css/redmond.datepick.css" rel="stylesheet">
+    <script src="js/jquery.plugin.min.js"></script>
+    <script src="js/jquery.datepick.js"></script>
     <!--&lt;!&ndash; Jasmine &ndash;&gt;-->
     <!--<script type="text/javascript" src="../jasmine/lib/jasmine-2.5.2/jasmine.js"></script>-->
     <!--<script type="text/javascript" src="../jasmine/lib/jasmine-2.5.2/jasmine-html.js"></script>-->
@@ -41,10 +45,11 @@
 <body>
 
 <nav>
-  <li><a class="active" href="index.html">Home</a></li>
+    <li><a href="index.html">MyTimeMaster</a></li>
+    <li><a class="active" href="index.html">Home</a></li>
     <li><a href="about.html">About</a></li>
-  <li><a href="contact.html">Contact</a></li>
-  <li class="right" id="signout"><a href="javascript:firebase.auth().signOut()">Sign Out</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li class="right" id="signout"><a href="javascript:firebase.auth().signOut()">Sign Out</a></li>
     <li class="right"><a href="#"><span id="sign-in-status"></span></a></li>
 </nav>
 <br/>
@@ -59,26 +64,26 @@
 </div>
 
 
-<div id="pickDate">
-    <form action="">
-        <h2>Choose a date before 2018-01-01:</h2>
-        <input type="date" name="date" max="2017-12-31"><input type="submit">
-    </form>
-</div>
-<div id="content">
+<!--<div id="pickDate">-->
+    <!--<h2>Choose a date before 2018-01-01:</h2>-->
+    <!--<input id="filterDate" type="date" name="date" max="2017-12-31">-->
+    <!--&lt;!&ndash;<p  id="pickedDate"></p>&ndash;&gt;-->
+<!--</div>-->
+<!--<div id="inlineDatepicker"></div>-->
+<!--<div id="printDates">dates</div>-->
+<div class="col-sm-12" id="content">
     <!-- This element's contents will be replaced with your component. -->
 </div>
 
-<div id="footer">
-     <span id="account-details"></span>
-</div>
-
-
-<div id="chart">
-    <!-- This element's contents will be replaced with your component. -->
-    <h1>Today's Time Allocation</h1><br/>
-    <svg class="chart"></svg>
-
+<br/><br/>
+<div class="col-sm-12">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8" id="chart">
+        <!-- This element's contents will be replaced with your component. -->
+        <h1>Step 3: View Time Allocation<br/><span id="pickedDateForChart"></span> </h1><br/>
+        <svg class="chart"></svg>
+    </div>
+    <div class="col-sm-2"></div>
 </div>
 
 <!-- Custom JS -->
