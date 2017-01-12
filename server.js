@@ -19,15 +19,17 @@ var fireRef = firebase.database().ref('users');
 
 //Create a new event
 app.post('/event', urlencodedParser, function(req, res){
-    console.log("New req");
-    console.log("Client wants to create event: '" + req.body.name + "'");
-    console.log("Token: " + req.body.token);
+    // console.log("New req");
+    // console.log("Client wants to create event: '" + req.body.name + "'");
+    // console.log("Token: " + req.body.token);
     var idToken = req.body.token;
     firebase.auth().verifyIdToken(idToken).then(function (decodedToken) {
         var uid = decodedToken.uid;
-        console.log("uid " + uid);
-        console.log("date " + req.body.date);
-        fireRef.child(uid).push({"name":req.body.name, "hours" : req.body.hours, "date": req.body.date}, function(){
+        // console.log("uid " + uid);
+        // console.log("date " + req.body.date);
+        // console.log("type " + req.body.type);
+        fireRef.child(uid).push({
+            "name":req.body.name, "hours" : req.body.hours, "date": req.body.date, "type": req.body.type}, function(){
             res.send("ok!");
         }).catch(function() {
             res.status(403);
@@ -38,10 +40,10 @@ app.post('/event', urlencodedParser, function(req, res){
 
 // Delete an event
 app.delete('/event', urlencodedParser, function (req, res) {
-    console.log("New req");
-    console.log("Client wants to delete event: '" + req.body.name + "'");
-    console.log("Token: " + req.body.token);
-    console.log("key: " + req.body.key);
+    // console.log("New req");
+    // console.log("Client wants to delete event: '" + req.body.name + "'");
+    // console.log("Token: " + req.body.token);
+    // console.log("key: " + req.body.key);
 
     var idToken = req.body.token;
     firebase.auth().verifyIdToken(idToken).then(function (decodedToken) {

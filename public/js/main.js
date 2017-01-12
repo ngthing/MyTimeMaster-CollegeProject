@@ -30,50 +30,10 @@ function getToday(){
     today = mm+'-'+dd+'-'+ yyyy;
     return today;
 }
-// D3js for chart here
-/*
-function getTimeChartByDate(eventsBoxRef, date) {
-    eventsBoxRef.on('value', function(snapshot) {
-        var data = [];
-        snapshot.forEach(function(childSnapshot) {
-            var childData = childSnapshot.val();
-            console.log("childdata " + childData);
-            console.log("pickedDate " + pickedDate);
-            data.push(childData);
-        });
-        // console.log("data " +data);
-        var width = 420,
-            barHeight = 20;
-
-        var x = d3.scale.linear()
-            .domain([0, d3.max(data)])
-            .range([0, width]);
-
-        var chart = d3.select(".chart")
-            .attr("width", width)
-            .attr("height", barHeight * data.length);
-
-        var bar = chart.selectAll("g")
-            .data(data)
-            .enter().append("g")
-            .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
-
-        bar.append("rect")
-            .attr("width", function(d){ return d.hours*100;})
-            .attr("height", barHeight - 1);
-
-        bar.append("text")
-            .attr("x", function(d,i) { return d.hours*100 - d.hours*10; })
-            .attr("y", barHeight / 2)
-            .attr("dy", ".35em")
-            .text(function(d) { return d.name + " for " + d.hours + "hrs";});
-    });
-    return;
-}*/
 var userName;
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-        console.log("Signed in");
+        // console.log("Signed in");
         $("#firebaseui-auth-container").hide();
         $("#intro").hide();
         // User is signed in.
@@ -112,7 +72,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                 // Leave the lines as is for the providers you want to offer your users.
 
                 firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+                firebase.auth.FacebookAuthProvider.PROVIDER_ID,
                 // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
                 // firebase.auth.GithubAuthProvider.PROVIDER_ID,
                 // firebase.auth.EmailAuthProvider.PROVIDER_ID
@@ -142,12 +102,10 @@ var Event = React.createClass({
         //onClick={this.props.event.removeEvent.bind(null, this.props.event['.key'])}
         return (
             <div className='event'>
-                <h4 className='name'>
-                    <button className="btn btn-danger btn-xs" onClick={this.props.delEvent.bind(null, this.props.event['.key'])}>&#x2716;</button>
-                    {this.props.event.name}. For: {this.props.event.hours} hours.
-                </h4>
-
-                {/*<span dangerouslySetInnerHTML={{__html: rawMarkup}} />*/}
+                <li className="list-group-item">{this.props.event.name}
+                    <span className="badge" href="#" onClick={this.props.delEvent.bind(null, this.props.event['.key'])}>&#x2716;</span>
+                    <span className="badge">{this.props.event.hours}</span><span className="badge">{this.props.event.type}</span>
+                </li>
             </div>
         );
     }
@@ -168,7 +126,7 @@ var EventList = React.createClass({
             //     console.log("Filter " + value.hours);
             //     return false;
             // }
-            console.log("Get events only on " + filterDate);
+            // console.log("Get events only on " + filterDate);
             if (value.date == filterDate)
                 return true;
             else
@@ -178,28 +136,54 @@ var EventList = React.createClass({
         }).map(function (event, index) {
             return <Event index={index} event={event} delEvent={removeEvent}></Event>;
         });
-        return <div className='eventList'>{eventNodes}</div>;
+        return <div className='eventList'><ul className="list-group">{eventNodes}</ul></div>;
 
     }
 });
 
 var EventForm = React.createClass({
+    getInitialState: function() {
+        return {
+            eventType: 'family'
+        };
+    },
+
+    handleChange:function(e){
+        var type = this.refs.type.value;
+        this.setState({eventType: type});
+    },
     handleSubmit: function(e) {
         e.preventDefault();
         var name = this.refs.name.value.trim();
         var hours = this.refs.hours.value;
-        this.props.onEventSubmit({name: name, hours: hours});
+        this.props.onEventSubmit({name: name, hours: hours, type: this.state.eventType});
         this.refs.name.value = '';
         this.refs.hours.value = '';
     },
+
     render: function() {
         return (
             <form className='eventForm' onSubmit={this.handleSubmit}>
-                <br/><h5>Add a new Event:</h5>
-                <input type='text' placeholder='Event name' ref='name' required/>
-                <br/>Duration (in hours):
-                <input type="number" ref="hours" min="0.25" max="10" step="any" placeholder='min 0.25 - max 10' required />
-                <br/><input type='submit' className="btn btn-info btn-sm" value='Save' />
+                <div className="form-group">
+                    <h2>Add a new Event</h2>
+                    <label for="eventName">Event Name:</label>
+                    <input type='text' className="form-control" placeholder='Work on Essay#1, Run and Yoga,  Watch Spirited Away with my sister, etc.' ref='name' required/>
+                    <label for="eventDuration">Duration (in hours):</label>
+                    <input type="number" className="form-control" ref="hours" min="0.25" max="10" step="any" placeholder='E.g. 0.25 hours (= 15 minutes)' required />
+                    <label for="eventType">Event Type</label>
+                        <select className="form-control" ref='type' value={this.state.eventType} onChange={this.handleChange}>
+                            <option value="Exercise">Exercise</option>
+                            <option value="ExploreWorld">Explore World Around Me</option>
+                            <option value="Hobby">Hobby</option>
+                            <option value="Relax">Just Relax</option>
+                            <option value="Family">Spend Time with Family</option>
+                            <option value="Friend">Spend time with Friend</option>
+                            <option value="Study">Study</option>
+                            <option value="Work">Work</option>
+                        </select>
+                    <br/>
+                    <input type='submit' className="btn btn-info btn-sm" value='Save this Event' />
+                </div>
             </form>
         );
     }
@@ -215,14 +199,12 @@ var EventBox = React.createClass({
             $.ajax({
                 type: "POST",
                 url: "/event",
-                data: {name: event.name, hours: event.hours, date: pickedDate,token: idToken},
+                data: {name: event.name, hours: event.hours, date: pickedDate, type: event.type, token: idToken},
             });
         });
 
-        console.log("Date: " + this.state.filterDate);
-        //console.log("pickedDate: " + pickedDate);
-        console.log("event.name " +event.name);
-        console.log("event.hours " +event.hours);
+
+
     },
 
     getInitialState: function() {
@@ -235,7 +217,7 @@ var EventBox = React.createClass({
     componentWillMount: function() {
         // Here we bind the component to Firebase and it handles all data updates,
         // no need to poll as in the React example.
-        console.log("Looking for userName: " + userName);
+        // console.log("Looking for userName: " + userName);
         this.bindAsArray(firebase.database().ref('eventsBox').child(userName), 'data');
         console.log(firebase.database().ref('eventsBox').child(userName).once("value",function(val){
         }));
@@ -247,7 +229,6 @@ var EventBox = React.createClass({
     showDate: function(date) {
     // alert('The date chosen is ' + date);
     var pickedDate = $('#inlineDatepicker').datepick('getDate')[0];
-    console.log(pickedDate);
     var dd = pickedDate.getDate();
     var mm = pickedDate.getMonth()+1; //January is 0!
     var yyyy = pickedDate.getFullYear();
@@ -262,13 +243,15 @@ var EventBox = React.createClass({
         mm='0'+mm
     }
     var todayToStoreInFB = mm+'-'+dd+'-'+ yyyy;
-    console.log(todayToStoreInFB);
+    // console.log(todayToStoreInFB);
     var todayToShow = day + ', ' + month + ' ' + dd +', ' +yyyy;
     $('#printDate').text(todayToShow);
         $('#pickedDate').text(todayToShow);
         $('#pickedDateForChart').text(todayToShow);
+
     this.setState({filterDate: todayToStoreInFB});
 
+        // Update date chart
         var chart = d3.select(".chart");
         // Remove the old chart
         d3.select(".chart").selectAll("g").remove();
@@ -277,10 +260,7 @@ var EventBox = React.createClass({
             var data = [];
             snapshot.forEach(function (childSnapshot) {
                 var childData = childSnapshot.val();
-                // console.log("childdata " + childData);
-                console.log("childData.date" + childData.date);
                 if (childData.date == todayToStoreInFB) {
-                    console.log("add " + childData.name);
                     data.push(childData);
                 }
             });
@@ -324,7 +304,7 @@ var EventBox = React.createClass({
 },
 removeEvent: function (key) {
         firebase.auth().currentUser.getToken().then(function(idToken) {
-            console.log("token" + idToken);
+            // console.log("token" + idToken);
             $.ajax({
                 url: "/event",
                 type: 'DELETE',
@@ -332,36 +312,37 @@ removeEvent: function (key) {
             });
         });
     },
-    /*
-    getFilterDate : function(){
-        //set filterDate to be the date that the user selected
-        //FilterDate is used when new event is created to select what date to make
-        //FilterDate is used in list render to
-        //then call this.setstate(data...)
-        // $(function() {
-        //     $('#inlineDatepicker').datepick({onSelect: showDate});
-        // });
-        //
-        var pickedDate = $("#filterDate").val();
-        $("#pickedDate").text(pickedDate);
-        console.log("pickdate " + pickedDate);
-        this.setState({filterDate: pickedDate});
-        // console.log("date change detected");
-    },*/
+
     render: function() {
         return (
-            <div className='eventBox'>
-                <div className="col-sm-5">
-                    <h2>Step1: Pick a date to create/view your events:</h2>
-                    <div id="inlineDatepicker"></div><br/>
-                    <h5>Current date: <span id="printDate"></span></h5>
+            <div className="eventBox">
+                <div className="col-sm-12">
+                    <div className="col-sm-1"></div>
+                    <div className="col-sm-3" id="calendar">
+                        <h2>Pick a Date</h2>
+                        <div id="inlineDatepicker"></div>
+                        <h4><small>Current date:</small> <br/><span id="printDate">{this.state.filterDate}</span></h4>
+                    </div>
+                    <div className="col-sm-7" id="eventInput">
+                        <EventForm onEventSubmit={this.handleEventSubmit} />
+                    </div>
+                    <div className="col-sm-1"></div>
                 </div>
-                <div className="col-sm-7">
-                    {/*<input id="filterDate" onChange={this.getFilterDate} type="date" name="date" max="2017-12-31" value={this.state.filterDate}/>*/}
-                    {/*<input id="printDates" onChange={this.getFilterDate} type='text' placeholder='date' value=""/>*/}
-                    <h1>Step2: Create/View your events on<br/> <span id="pickedDate">today</span></h1>
-                    <EventList data={this.state.data} removeEvent={this.removeEvent} filterDate={this.state.filterDate}/>
-                    <EventForm onEventSubmit={this.handleEventSubmit} />
+
+                <br/><br/><br/>
+
+                <div className="col-sm-12">
+                    <div className="col-sm-1"></div>
+                    <div className="col-sm-6" id="eventList">
+                        <h2>All events</h2>
+                        <EventList data={this.state.data} removeEvent={this.removeEvent} filterDate={this.state.filterDate}/>
+                    </div>
+
+                    <div className="col-sm-4" id="eventChart">
+                        <h2>Time Chart</h2>
+                        <p>This section is in update process.</p>
+                    </div>
+                    <div className="col-sm-1"></div>
                 </div>
             </div>
         );
