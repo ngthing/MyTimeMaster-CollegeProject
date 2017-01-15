@@ -1,6 +1,8 @@
 /**
  * Created by thinguyen on 10/10/16.
  */
+
+// Set up Firebase
 "use strict";
 var config = {
     apiKey: "AIzaSyAWoy65K87hcXNTgbcW_wRa9-Sw3zwHi70",
@@ -10,25 +12,123 @@ var config = {
     messagingSenderId: "17686327988"
 };
 firebase.initializeApp(config);
-// Global var
+
+// Global variables
 var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-//Helpful functions
+//Global function
+// GetToday return an array of two presentation of the current date
 function getToday(){
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth()+1; //January is 0!
     var yyyy = today.getFullYear();
-
-    if(dd<10) {
-        dd='0'+dd
-    }
-
-    if(mm<10) {
-        mm='0'+mm
-    }
+    var dayOfWeek = days[today.getDay()];
+    var month = months[mm-1]
+    if(dd<10) { dd='0'+dd; }
+    if(mm<10) { mm='0'+mm; }
     today = mm+'-'+dd+'-'+ yyyy;
-    return today;
+    var todayToDisplay =  dayOfWeek + ', ' + month + ' ' + dd +', ' +yyyy;
+    var result = [today, todayToDisplay];
+    return result;
+}
+
+// Update Time Chart is called when user want to view time chart in different day,
+// or when user edit the EventList of the current date
+function updateTimeChart(filterDate) {
+    console.log("update timechart");
+    var chart = d3.select(".chart");
+    // Remove the old chart
+    d3.select(".chart").selectAll("g").remove();
+    var eventsBoxRef = firebase.database().ref('eventsBox').child(userName);
+    eventsBoxRef.on('value', function(snapshot) {
+        var data = [];
+        snapshot.forEach(function (childSnapshot) {
+            var childData = childSnapshot.val();
+            if (childData.date == filterDate) {
+                data.push(childData);
+            }
+        });
+        var i = 0 , totalHours = 0;
+        // Get total hours
+        for (i = 0; i< data.length ; i++) {
+            totalHours += parseFloat(data[i].hours);
+        }
+        var margin = {top: 20, right: 180, bottom: 100, left: 80},
+            width = 960 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
+
+        var x = d3.scale.ordinal()
+            .rangeRoundBands([0, width], .1, .3);
+
+        var y = d3.scale.linear()
+            .range([height, 0]);
+
+        var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom");
+
+        var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left")
+            .ticks(8, "%");
+
+        var svg = d3.select("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        x.domain(data.map(function(d) { return d.name; }));
+        y.domain([0, d3.max(data, function(d) { return d.hours/totalHours; })]);
+
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis)
+            .selectAll(".tick text")
+            .call(wrap, x.rangeBand());
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis);
+        svg.selectAll(".bar")
+            .data(data)
+            .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", function(d) { return x(d.name); })
+            .attr("width", x.rangeBand())
+            .attr("y", function(d) { return y(d.hours/totalHours); })
+            .attr("height", function(d) { return height - y(d.hours/totalHours); });
+
+        function wrap(text, width) {
+            text.each(function() {
+                var text = d3.select(this),
+                    words = text.text().split(/\s+/).reverse(),
+                    word,
+                    line = [],
+                    lineNumber = 0,
+                    lineHeight = 1.1, // ems
+                    y = text.attr("y"),
+                    dy = parseFloat(text.attr("dy")),
+                    tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+                while (word = words.pop()) {
+                    line.push(word);
+                    tspan.text(line.join(" "));
+                    if (tspan.node().getComputedTextLength() > width) {
+                        line.pop();
+                        tspan.text(line.join(" "));
+                        line = [word];
+                        tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                    }
+                }
+            });
+        }
+        function type(d) {
+            d.value = +d.value;
+            return d;
+        }
+
+    });
 }
 var userName;
 firebase.auth().onAuthStateChanged(function(user) {
@@ -94,7 +194,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     console.log(error);
 });
 
-// Event, EventList, EventForm, EventBox
+// Event, EventList, EventForm, EventBox Components
 var Event = React.createClass({
     render: function() {
         // var rawMarkup = converter.makeHtml(this.props.children.toString());
@@ -113,6 +213,7 @@ var Event = React.createClass({
 
 var EventList = React.createClass({
     render: function() {
+        var totalEventsHoursToday = 0;
         var removeEvent= this.props.removeEvent;
         var filterDate = this.props.filterDate;
         var eventNodes = this.props.data.filter(function(value){
@@ -127,16 +228,23 @@ var EventList = React.createClass({
             //     return false;
             // }
             // console.log("Get events only on " + filterDate);
-            if (value.date == filterDate)
+            // console.log(value.name);
+            if (value.date == filterDate) {
+                totalEventsHoursToday += parseFloat(value.hours);
                 return true;
+            }
             else
                 return false;
-            //return true;
-
         }).map(function (event, index) {
             return <Event index={index} event={event} delEvent={removeEvent}></Event>;
         });
-        return <div className='eventList'><ul className="list-group">{eventNodes}</ul></div>;
+        return (
+            <div className='eventList'>
+                <ul className="list-group">{eventNodes}</ul>
+                <h4>Total Hours: {totalEventsHoursToday} </h4>
+            </div>
+
+        );
 
     }
 });
@@ -144,7 +252,7 @@ var EventList = React.createClass({
 var EventForm = React.createClass({
     getInitialState: function() {
         return {
-            eventType: 'family'
+            eventType: 'Exercise'
         };
     },
 
@@ -166,11 +274,11 @@ var EventForm = React.createClass({
             <form className='eventForm' onSubmit={this.handleSubmit}>
                 <div className="form-group">
                     <h2>Add a new Event</h2>
-                    <label for="eventName">Event Name:</label>
+                    <label>Event Name:</label>
                     <input type='text' className="form-control" placeholder='Work on Essay#1, Run and Yoga,  Watch Spirited Away with my sister, etc.' ref='name' required/>
-                    <label for="eventDuration">Duration (in hours):</label>
+                    <label>Duration (in hours):</label>
                     <input type="number" className="form-control" ref="hours" min="0.25" max="10" step="any" placeholder='E.g. 0.25 hours (= 15 minutes)' required />
-                    <label for="eventType">Event Type</label>
+                    <label>Event Type</label>
                         <select className="form-control" ref='type' value={this.state.eventType} onChange={this.handleChange}>
                             <option value="Exercise">Exercise</option>
                             <option value="ExploreWorld">Explore World Around Me</option>
@@ -202,7 +310,8 @@ var EventBox = React.createClass({
                 data: {name: event.name, hours: event.hours, date: pickedDate, type: event.type, token: idToken},
             });
         });
-
+        // Update time chart
+        updateTimeChart(pickedDate);
 
 
     },
@@ -210,7 +319,7 @@ var EventBox = React.createClass({
     getInitialState: function() {
         return {
             data: [],
-            filterDate: getToday(),
+            filterDate: getToday()[0],
         };
     },
 
@@ -234,14 +343,9 @@ var EventBox = React.createClass({
     var yyyy = pickedDate.getFullYear();
     var month = months[mm-1]
     var day = days[ pickedDate.getDay() ];
+    if(dd<10) { dd='0'+dd; }
+    if(mm<10) { mm='0'+mm; }
 
-    if(dd<10) {
-        dd='0'+dd
-    }
-
-    if(mm<10) {
-        mm='0'+mm
-    }
     var todayToStoreInFB = mm+'-'+dd+'-'+ yyyy;
     // console.log(todayToStoreInFB);
     var todayToShow = day + ', ' + month + ' ' + dd +', ' +yyyy;
@@ -250,57 +354,9 @@ var EventBox = React.createClass({
         $('#pickedDateForChart').text(todayToShow);
 
     this.setState({filterDate: todayToStoreInFB});
+    // Update time chart
+    updateTimeChart(todayToStoreInFB);
 
-        // Update date chart
-        var chart = d3.select(".chart");
-        // Remove the old chart
-        d3.select(".chart").selectAll("g").remove();
-        var eventsBoxRef = firebase.database().ref('eventsBox').child(userName);
-        eventsBoxRef.on('value', function(snapshot) {
-            var data = [];
-            snapshot.forEach(function (childSnapshot) {
-                var childData = childSnapshot.val();
-                if (childData.date == todayToStoreInFB) {
-                    data.push(childData);
-                }
-            });
-            var i = 0;
-            for (i = 0; i< data.length ; i++)
-            { console.log(data[i].name);}
-            var width = 2400,
-                barHeight = 20;
-
-            var x = d3.scale.linear()
-                .domain([0, d3.max(data)])
-                .range([0, width]);
-
-            var chart = d3.select(".chart")
-                .attr("width", width)
-                .attr("height", barHeight * data.length);
-
-            var bar = chart.selectAll("g")
-                .data(data)
-                .enter().append("g")
-                .attr("transform", function (d, i) {
-                    return "translate(0," + i * barHeight + ")";
-                });
-
-            bar.append("rect")
-                .attr("width", function (d) {
-                    return d.hours * 50;
-                })
-                .attr("height", barHeight - 1);
-
-            bar.append("text")
-                .attr("x", function (d, i) {
-                    return d.hours * 50 - 3;
-                })
-                .attr("y", barHeight / 2)
-                .attr("dy", ".35em")
-                .text(function (d) {
-                    return d.name + " - " + d.hours + "hrs";
-                });
-        });
 },
 removeEvent: function (key) {
         firebase.auth().currentUser.getToken().then(function(idToken) {
@@ -321,7 +377,7 @@ removeEvent: function (key) {
                     <div className="col-sm-3" id="calendar">
                         <h2>Pick a Date</h2>
                         <div id="inlineDatepicker"></div>
-                        <h4><small>Current date:</small> <br/><span id="printDate">{this.state.filterDate}</span></h4>
+                        <h4><small>Current date:</small> <br/><span id="printDate">{getToday()[1]}</span></h4>
                     </div>
                     <div className="col-sm-7" id="eventInput">
                         <EventForm onEventSubmit={this.handleEventSubmit} />
@@ -332,17 +388,18 @@ removeEvent: function (key) {
                 <br/><br/><br/>
 
                 <div className="col-sm-12">
-                    <div className="col-sm-1"></div>
-                    <div className="col-sm-6" id="eventList">
+                    {/*<div className="col-sm-1"></div>*/}
+                    <div className="col-sm-4" id="eventList">
                         <h2>All events</h2>
                         <EventList data={this.state.data} removeEvent={this.removeEvent} filterDate={this.state.filterDate}/>
                     </div>
 
-                    <div className="col-sm-4" id="eventChart">
+                    <div className="col-sm-8" id="eventChart">
                         <h2>Time Chart</h2>
-                        <p>This section is in update process.</p>
+                        <svg className="chart" width="700" height="500"></svg>
+
                     </div>
-                    <div className="col-sm-1"></div>
+                    {/*<div className="col-sm-1"></div>*/}
                 </div>
             </div>
         );
