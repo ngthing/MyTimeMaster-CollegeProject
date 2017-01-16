@@ -12,7 +12,24 @@ var config = {
     messagingSenderId: "17686327988"
 };
 firebase.initializeApp(config);
+// FB test
+function sharePost() {
+    FB.ui(
+        {
+            method: 'share',
+            href: 'https://developers.facebook.com/docs/',
+        },
+        // callback
+        function(response) {
+            if (response && !response.error_message) {
+                alert('Posting completed.');
+            } else {
+                alert('Error while posting.');
+            }
+        }
+    );
 
+}
 // Global variables
 var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -34,14 +51,16 @@ function getToday(){
 }
 
 // Update Time Chart is called when user want to view time chart in different day,
-// or when user edit the EventList of the current date
+// or when user edit the EventList of the current date (e.i add new event or remove event)
 function updateTimeChart(filterDate) {
-    console.log("update timechart");
     var chart = d3.select(".chart");
     // Remove the old chart
     d3.select(".chart").selectAll("g").remove();
     var eventsBoxRef = firebase.database().ref('eventsBox').child(userName);
     eventsBoxRef.on('value', function(snapshot) {
+        var chart = d3.select(".chart");
+        // Remove the old chart
+        d3.select(".chart").selectAll("g").remove();
         var data = [];
         snapshot.forEach(function (childSnapshot) {
             var childData = childSnapshot.val();
@@ -130,6 +149,7 @@ function updateTimeChart(filterDate) {
 
     });
 }
+
 var userName;
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
@@ -173,10 +193,12 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                 firebase.auth.GoogleAuthProvider.PROVIDER_ID,
                 firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+
                 // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
                 // firebase.auth.GithubAuthProvider.PROVIDER_ID,
                 // firebase.auth.EmailAuthProvider.PROVIDER_ID
             ],
+
             // Terms of service url.
             'tosUrl': '<your-tos-url>',
         };
@@ -197,13 +219,10 @@ firebase.auth().onAuthStateChanged(function(user) {
 // Event, EventList, EventForm, EventBox Components
 var Event = React.createClass({
     render: function() {
-        // var rawMarkup = converter.makeHtml(this.props.children.toString());
-        //onClick={this.props.removeEvent.bind(null, this.props.index)}
-        //onClick={this.props.event.removeEvent.bind(null, this.props.event['.key'])}
         return (
             <div className='event'>
                 <li className="list-group-item">{this.props.event.name}
-                    <span className="badge" href="#" onClick={this.props.delEvent.bind(null, this.props.event['.key'])}>&#x2716;</span>
+                    <span className="badge"><a className="remove-badge" data-toggle="tooltip" data-placement="right" title="Remove" onClick={this.props.delEvent.bind(null, this.props.event['.key'])}>&#x2716;</a></span>
                     <span className="badge">{this.props.event.hours}</span><span className="badge">{this.props.event.type}</span>
                 </li>
             </div>
@@ -310,8 +329,8 @@ var EventBox = React.createClass({
                 data: {name: event.name, hours: event.hours, date: pickedDate, type: event.type, token: idToken},
             });
         });
-        // Update time chart
-        updateTimeChart(pickedDate);
+        // // Update time chart
+        // updateTimeChart(pickedDate);
 
 
     },
@@ -333,6 +352,7 @@ var EventBox = React.createClass({
 
     },
     componentDidMount :function(){
+        updateTimeChart(getToday()[0]);
         $('#inlineDatepicker').datepick({onSelect: this.showDate});
     },
     showDate: function(date) {
@@ -405,5 +425,3 @@ removeEvent: function (key) {
         );
     }
 });
-
-

@@ -12,7 +12,7 @@
 }
 
 .bar:hover {
-    fill: brown;
+    fill: lightblue;
 }
 
 .axis--x path {
@@ -103,16 +103,11 @@ nav li.right {float: right;}
     nav li {float: none;}
 }
 
-
-
-
-/*#calendar*/
-/*{*/
-    /*!*background-color:rgba(192,192,192,0.3);*!*/
-    /*padding-top: 10px;*/
-    /*padding-right: 30px;*/
-    /*padding-bottom: 10px;*/
-    /*padding-left: 30px;*/
-/*}*/
-/*#eventList {background-color:rgba(192,192,192,0.3);}*/
-/*#eventChart {background-color:rgba(255,255,0,0.3);}*/
+.remove-badge {
+    color: white;
+}
+a.remove-badge {
+    cursor: pointer;
+    text-decoration:none;
+    color: white;
+}
