@@ -402,7 +402,7 @@ removeEvent: function (key) {
         return (
             <div className="eventBox">
                 <div className="col-sm-12">
-                    <h1>Hi {displayName}! Let's make your colorful day together! </h1>
+                    <h1 id="hi">Hi {displayName}! Let's make your colorful day together! </h1>
                 </div>
                 <div className="col-sm-12">
                     <div className="col-sm-1"></div>

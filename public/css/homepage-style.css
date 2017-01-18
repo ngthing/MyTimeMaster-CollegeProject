@@ -50,12 +50,12 @@ html, body{
     background-color: aliceblue;
 }
 
-h1{
-    color: #145A32;
+h2, h1 {
+    color: navy;
     text-align: center;
 }
-h2 {
-    color: navy;
+#hi {
+    color: #145A32;
     text-align: center;
 }
 article {
