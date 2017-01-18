@@ -1,18 +1,16 @@
 /* Design for time bar*/
-.chart rect {
-    fill: steelblue;
-}
+
 .chart text {
     fill: navy;
     font: 15px sans-serif;
     /*text-anchor: end;*/
 }
-.bar {
-    fill: steelblue;
-}
+/*.bar {*/
+    /*fill: steelblue;*/
+/*}*/
 
 .bar:hover {
-    fill: lightblue;
+    fill: #D7DBDD;
 }
 
 .axis--x path {

@@ -73,6 +73,7 @@ function updateTimeChart(filterDate) {
         for (i = 0; i< data.length ; i++) {
             totalHours += parseFloat(data[i].hours);
         }
+        // Below d3.js is adopted from https://bl.ocks.org/mbostock/7555321
         var margin = {top: 20, right: 180, bottom: 100, left: 80},
             width = 960 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
@@ -116,6 +117,18 @@ function updateTimeChart(filterDate) {
             .attr("class", "bar")
             .attr("x", function(d) { return x(d.name); })
             .attr("width", x.rangeBand())
+            .attr("fill", function (d) {
+                if (d.type === "Exercise"){ return "#52BE80";}
+                else if (d.type === "ExploreWorld"){ return "#99a3a4";}
+                else if (d.type === "Hobby"){ return "#eb984e";}
+                else if (d.type === "Relax"){ return "#f4d03f";}
+                else if (d.type === "Family"){ return "#48c9b0";}
+                else if (d.type === "Friend"){ return "#5dade2";}
+                else if (d.type === "Family") { return "#9B59B6";}
+                else if (d.type === "Study") { return "#F7DC6F";}
+                else if (d.type === "Work") { return "#566573";}
+
+            })
             .attr("y", function(d) { return y(d.hours/totalHours); })
             .attr("height", function(d) { return height - y(d.hours/totalHours); });
 
@@ -150,14 +163,14 @@ function updateTimeChart(filterDate) {
     });
 }
 
-var userName;
+var userName, displayName;
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         // console.log("Signed in");
         $("#firebaseui-auth-container").hide();
         $("#intro").hide();
         // User is signed in.
-        var displayName = user.displayName;
+        displayName = user.displayName;
         var email = user.email;
         var emailVerified = user.emailVerified;
         var photoURL = user.photoURL;
@@ -329,10 +342,6 @@ var EventBox = React.createClass({
                 data: {name: event.name, hours: event.hours, date: pickedDate, type: event.type, token: idToken},
             });
         });
-        // // Update time chart
-        // updateTimeChart(pickedDate);
-
-
     },
 
     getInitialState: function() {
@@ -392,6 +401,9 @@ removeEvent: function (key) {
     render: function() {
         return (
             <div className="eventBox">
+                <div className="col-sm-12">
+                    <h1>Hi {displayName}! Let's make your colorful day together! </h1>
+                </div>
                 <div className="col-sm-12">
                     <div className="col-sm-1"></div>
                     <div className="col-sm-3" id="calendar">
