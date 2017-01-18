@@ -3,11 +3,7 @@
 .chart text {
     fill: navy;
     font: 15px sans-serif;
-    /*text-anchor: end;*/
 }
-/*.bar {*/
-    /*fill: steelblue;*/
-/*}*/
 
 .bar:hover {
     fill: #D7DBDD;
@@ -31,6 +27,9 @@
 .x.axis path {
     display: none;
 }
+body {
+    font-family: "Comic Sans MS";
+}
 .container {
     min-height: 100%;
     height: auto !important;
@@ -51,7 +50,11 @@ html, body{
     background-color: aliceblue;
 }
 
-h1, h2 {
+h1{
+    color: #145A32;
+    text-align: center;
+}
+h2 {
     color: navy;
     text-align: center;
 }

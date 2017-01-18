@@ -126,7 +126,7 @@ function updateTimeChart(filterDate) {
                 else if (d.type === "Friend"){ return "#5dade2";}
                 else if (d.type === "Family") { return "#9B59B6";}
                 else if (d.type === "Study") { return "#F7DC6F";}
-                else if (d.type === "Work") { return "#566573";}
+                else if (d.type === "Work") { return "#ABB2B9";}
 
             })
             .attr("y", function(d) { return y(d.hours/totalHours); })
