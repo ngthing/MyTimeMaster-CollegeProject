@@ -117,18 +117,7 @@ function updateTimeChart(filterDate) {
             .attr("class", "bar")
             .attr("x", function(d) { return x(d.name); })
             .attr("width", x.rangeBand())
-            .attr("fill", function (d) {
-                if (d.type === "Exercise"){ return "#52BE80";}
-                else if (d.type === "ExploreWorld"){ return "#99a3a4";}
-                else if (d.type === "Hobby"){ return "#eb984e";}
-                else if (d.type === "Relax"){ return "#f4d03f";}
-                else if (d.type === "Family"){ return "#48c9b0";}
-                else if (d.type === "Friend"){ return "#5dade2";}
-                else if (d.type === "Family") { return "#9B59B6";}
-                else if (d.type === "Study") { return "#F7DC6F";}
-                else if (d.type === "Work") { return "#ABB2B9";}
-
-            })
+            .attr("fill", function(d) {return d.color;})
             .attr("y", function(d) { return y(d.hours/totalHours); })
             .attr("height", function(d) { return height - y(d.hours/totalHours); });
 
@@ -284,19 +273,31 @@ var EventList = React.createClass({
 var EventForm = React.createClass({
     getInitialState: function() {
         return {
-            eventType: 'Exercise'
+            eventType: 'Exercise',
+            eventColor: 'STEELBLUE'
         };
     },
 
     handleChange:function(e){
         var type = this.refs.type.value;
-        this.setState({eventType: type});
+        var color;
+        if (type === "Exercise"){ color = "STEELBLUE";}
+        else if (type === "ExploreWorld"){ color = "GREEN";}
+        else if (type === "Hobby"){ color = "LIGHTSALMON";}
+        else if (type === "Relax"){ color = "LIGHTSKYBLUE";}
+        else if (type === "Family"){ color = "LIGHTPINK";}
+        else if (type === "Friend"){ color = "GOLD";}
+        else if (type === "Love"){ color = "RED";}
+        else if (type === "Socialize") { color = "LIGHTBLUE";}
+        else if (type === "Study") { color = "ORANGE";}
+        else if (type === "Work") { color = "GRAY";}
+        this.setState({eventType: type, eventColor: color});
     },
     handleSubmit: function(e) {
         e.preventDefault();
         var name = this.refs.name.value.trim();
         var hours = this.refs.hours.value;
-        this.props.onEventSubmit({name: name, hours: hours, type: this.state.eventType});
+        this.props.onEventSubmit({name: name, hours: hours, type: this.state.eventType, color: this.state.eventColor});
         this.refs.name.value = '';
         this.refs.hours.value = '';
     },
@@ -318,6 +319,8 @@ var EventForm = React.createClass({
                             <option value="Relax">Just Relax</option>
                             <option value="Family">Spend Time with Family</option>
                             <option value="Friend">Spend time with Friend</option>
+                            <option value="Love">Spend time with Loved Ones</option>
+                            <option value="Socialize">Get out there and socialize</option>
                             <option value="Study">Study</option>
                             <option value="Work">Work</option>
                         </select>
@@ -339,7 +342,7 @@ var EventBox = React.createClass({
             $.ajax({
                 type: "POST",
                 url: "/event",
-                data: {name: event.name, hours: event.hours, date: pickedDate, type: event.type, token: idToken},
+                data: {name: event.name, hours: event.hours, date: pickedDate, type: event.type, color: event.color, token: idToken},
             });
         });
     },
@@ -421,18 +424,23 @@ removeEvent: function (key) {
 
                 <div className="col-sm-12">
                     {/*<div className="col-sm-1"></div>*/}
-                    <div className="col-sm-4" id="eventList">
+                    <div className="col-sm-3" id="eventList">
                         <h2>All events</h2>
                         <EventList data={this.state.data} removeEvent={this.removeEvent} filterDate={this.state.filterDate}/>
                     </div>
 
-                    <div className="col-sm-8" id="eventChart">
+                    <div className="col-sm-7" id="eventChart">
                         <h2>Time Chart</h2>
-                        <svg className="chart" width="700" height="500"></svg>
+                        <svg className="chart" width="700" height="800"></svg>
+
+                    </div>
+                    <div className="col-sm-2" id="eventChart">
+                        <h2>Overall</h2>
 
                     </div>
                     {/*<div className="col-sm-1"></div>*/}
                 </div>
+
             </div>
         );
     }

@@ -42,10 +42,8 @@
 <body>
 
 <nav>
-    <li><a href="index.html">MyTimeMaster</a></li>
-    <li><a class="active" href="index.html">Home</a></li>
+    <li><a class="active" href="index.html">MyTimeMaster</a></li>
     <li><a href="about.html">About</a></li>
-    <li><a href="contact.html">Contact</a></li>
     <li class="right" id="signout"><a href="javascript:firebase.auth().signOut()">Sign Out</a></li>
     <li class="right"><a href="#"><span id="sign-in-status"></span></a></li>
 </nav>
@@ -53,11 +51,15 @@
 <div class="text-center" id="intro">
     <h1>Welcome to MyTimeMaster</h1>
     <p>MyTimeMaster is a time management and planner application.<br/>
-        With MyTimeMaster app, a user can create a personal account <br/>
-        and use the app as a tool to plan and allocate their time daily/weekly/monthly</p>
+        With MyTimeMaster app, you can use the app as a tool to plan and allocate your time daily/weekly/monthly</p>
     <br/>
-    <p>Sign up/ Sign in now to start orginize your time.</p>
+    <p>Sign up/ Sign in now to start orginize your time.<br/>
+        Note: It is best to Sign up with your Facebook account <br/> so that you can use our
+        "Share your Events with my Friends" feature.
+    </p>
     <div id="firebaseui-auth-container"></div>
+    <p>If you would like to learn about what MTM can do for you before signing up,<br/>
+        please check out the sample screenshots in <a href="about.html">About</a> section</p>
 </div>
 
 
@@ -65,8 +67,15 @@
 <div class="col-sm-12" id="content">
     <!-- This element's contents will be replaced with React's component. -->
 </div>
+
+<footer class="container">
+    <p>2017 - MyTimeMaster. Please contact <a href="http://mason.gmu.edu/~tnguy138/">Thi Nguyen</a> for comments and suggestions.
+    Thank you for using MyTimeMaster.
+    </p>
+</footer>
 <script src="//d3js.org/d3.v3.min.js"></script>
 <!-- Custom JS -->
 <script type="text/babel" src="js/main.js"></script>
+
 </body>
 </html>

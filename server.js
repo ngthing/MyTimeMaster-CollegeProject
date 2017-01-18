@@ -29,7 +29,7 @@ app.post('/event', urlencodedParser, function(req, res){
         // console.log("date " + req.body.date);
         // console.log("type " + req.body.type);
         fireRef.child(uid).push({
-            "name":req.body.name, "hours" : req.body.hours, "date": req.body.date, "type": req.body.type}, function(){
+            "name":req.body.name, "hours" : req.body.hours, "date": req.body.date, "type": req.body.type, "color":req.body.color }, function(){
             res.send("ok!");
         }).catch(function() {
             res.status(403);

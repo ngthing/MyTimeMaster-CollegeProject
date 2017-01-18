@@ -36,14 +36,7 @@ body {
     height: 100%;
     margin: 0 auto -100px; /* the bottom margin is the negative value of the footer's height */
 }
-#footer, .push {
-    height: 100px; /* .push must be the same height as .footer */
-}
-footer {
-    background-color: navy;
-    color: white;
-    padding: 10px;
-}
+
 html, body{
     margin: 10px ;
     height: 100%;
@@ -59,13 +52,16 @@ h2, h1 {
     text-align: center;
 }
 article {
+    color: black;
     margin: 20px;
-    padding: 3px;
-    text-align: center;
-    background-color: #ffffff;
-    opacity: 0.6;
+    padding: 10px;
+    background-color: white;
+    /*opacity: 0.8;*/
     filter: alpha(opacity=60); /* For IE8 and earlier */
     border-radius: 25px;
+}
+footer{
+    text-align: center;
 }
 
 nav {
