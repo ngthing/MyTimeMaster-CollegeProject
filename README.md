@@ -3,9 +3,6 @@ A time management and planner application
 
 Demo available at:
 Heroku: https://afternoon-reef-38020.herokuapp.com/
-=======
-Heroku: https://afternoon-reef-38020.herokuapp.com/index.html 
->>>>>>> 7cb81998356bb8f46e3e4a5a6246259d0421d529
 
 Note: This project is in process. Demo has not yet fully reflected the App's description below. 
 
