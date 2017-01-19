@@ -10,7 +10,7 @@ MyTimeMaster (MTM) is a time management and planner application.
 With MyTimeMaster app, you can create a personal account and use the app as a tool to plan and allocate your time daily/weekly/monthly.
 You will input what you plan to do for certain hours of a day and the type of that activity (e.i. Work, Study, Exercise, etc).
 The app will display the list of activities you created in certain days and the visualization of how the you allocate your time.
-
+You can also share your activities with friends on Facebook.
 ## MyTimeMaster's mission:
 MTM app aims to promote users with a habit of managing time wisely and living a fulfilled and balanced life.
 Specifically, the app will show the percentage of each activity category that users allocate daily
@@ -22,3 +22,5 @@ The visualization can help users determine their work-life balance or their prod
 
 The bar chart is adopted from [Wrapping Long Labels](https://bl.ocks.org/mbostock/7555321) by Mike Bostock
 
+## Screenshot
+![Alt](/screenshots/MTM-Jan19.png "MTM as of Jan 19, 2017")
