@@ -75,7 +75,7 @@ function updateTimeChart(filterDate) {
         }
         // Below d3.js is adopted from https://bl.ocks.org/mbostock/7555321
         var margin = {top: 20, right: 180, bottom: 100, left: 80},
-            width = 960 - margin.left - margin.right,
+            width = 700 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
 
         var x = d3.scale.ordinal()
@@ -152,6 +152,70 @@ function updateTimeChart(filterDate) {
     });
 }
 
+function updatePieChart(filterDate){
+    console.log("inside updatePieChart");
+    var eventsBoxRef = firebase.database().ref('eventsBox').child(userName);
+
+    eventsBoxRef.on('value', function(snapshot) {
+        var data = [];
+        snapshot.forEach(function (childSnapshot) {
+            var childData = childSnapshot.val();
+            // Get all events on filterDate
+            if (childData.date == filterDate) {
+                data.push(childData);
+            }
+        });
+        var mapTypeHour = new Map();
+        var colors=[];
+        for (var event of data){
+            // console.log(event.name);
+            // If type has not yet recorded in mapTypeHour
+            if (!mapTypeHour.has(event.type)){
+                mapTypeHour.set(event.type, parseFloat(event.hours));
+                colors.push(event.color);
+            }
+            else {
+                var currentHours =  mapTypeHour.get(event.type);
+                mapTypeHour.set(event.type, parseFloat(event.hours) + currentHours);
+            }
+        }
+        // create dataTable to feed to google chart API
+        var dataTable = [];
+        for ( let [key,val] of mapTypeHour.entries()){
+            dataTable.push([key,val]);
+        }
+        // Load the Visualization API and the corechart package.
+        google.charts.load('current', {'packages':['corechart']});
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(drawChart);
+
+        // Callback that creates and populates a data table,
+        // instantiates the pie chart, passes in the data and
+        // draws it.
+        function drawChart() {
+
+            // Create the data table.
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Type');
+            data.addColumn('number', 'Hours');
+            data.addRows(dataTable);
+            // Set chart options
+            var options = {
+                backgroundColor: 'transparent',
+                'title':"Hover me",
+                // 'is3D':true,
+                'width':400,
+                'height':400,
+                'colors': colors,
+                legend : 'none'};
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.PieChart(document.getElementById('pieChart'));
+            chart.draw(data, options);
+        }
+        });
+}
 var userName, displayName;
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
@@ -306,12 +370,12 @@ var EventForm = React.createClass({
         return (
             <form className='eventForm' onSubmit={this.handleSubmit}>
                 <div className="form-group">
-                    <h2>Add a new Event</h2>
-                    <label>Event Name:</label>
+                    <h2>Add a new Activity</h2>
+                    <label>Name:</label>
                     <input type='text' className="form-control" placeholder='Work on Essay#1, Run and Yoga,  Watch Spirited Away with my sister, etc.' ref='name' required/>
                     <label>Duration (in hours):</label>
                     <input type="number" className="form-control" ref="hours" min="0.25" max="10" step="any" placeholder='E.g. 0.25 hours (= 15 minutes)' required />
-                    <label>Event Type</label>
+                    <label>Type</label>
                         <select className="form-control" ref='type' value={this.state.eventType} onChange={this.handleChange}>
                             <option value="Exercise">Exercise</option>
                             <option value="ExploreWorld">Explore World Around Me</option>
@@ -365,6 +429,7 @@ var EventBox = React.createClass({
     },
     componentDidMount :function(){
         updateTimeChart(getToday()[0]);
+        updatePieChart(getToday()[0]);
         $('#inlineDatepicker').datepick({onSelect: this.showDate});
     },
     showDate: function(date) {
@@ -388,7 +453,7 @@ var EventBox = React.createClass({
     this.setState({filterDate: todayToStoreInFB});
     // Update time chart
     updateTimeChart(todayToStoreInFB);
-
+    updatePieChart(todayToStoreInFB);
 },
 removeEvent: function (key) {
         firebase.auth().currentUser.getToken().then(function(idToken) {
@@ -414,10 +479,10 @@ removeEvent: function (key) {
                         <div id="inlineDatepicker"></div>
                         <h4><small>Current date:</small> <br/><span id="printDate">{getToday()[1]}</span></h4>
                     </div>
-                    <div className="col-sm-7" id="eventInput">
+                    <div className="col-sm-4" id="eventInput">
                         <EventForm onEventSubmit={this.handleEventSubmit} />
                     </div>
-                    <div className="col-sm-1"></div>
+                    <div className="col-sm-4"></div>
                 </div>
 
                 <br/><br/><br/>
@@ -425,17 +490,18 @@ removeEvent: function (key) {
                 <div className="col-sm-12">
                     {/*<div className="col-sm-1"></div>*/}
                     <div className="col-sm-3" id="eventList">
-                        <h2>All events</h2>
+                        <h2>All Activities</h2>
                         <EventList data={this.state.data} removeEvent={this.removeEvent} filterDate={this.state.filterDate}/>
                     </div>
 
-                    <div className="col-sm-7" id="eventChart">
+                    <div className="col-sm-5" id="eventChart">
                         <h2>Time Chart</h2>
-                        <svg className="chart" width="700" height="800"></svg>
+                        <svg className="chart" width="300" height="600"></svg>
 
                     </div>
-                    <div className="col-sm-2" id="eventChart">
+                    <div className="col-sm-4">
                         <h2>Overall</h2>
+                        <div id="pieChart"></div>
 
                     </div>
                     {/*<div className="col-sm-1"></div>*/}
