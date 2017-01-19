@@ -1,35 +1,24 @@
 # MyTimeMaster
 A time management and planner application
 
-Demo available at:
-Heroku: https://afternoon-reef-38020.herokuapp.com/
+Live Demo available at Heroku: https://afternoon-reef-38020.herokuapp.com/
 
 Note: This project is in process. Demo has not yet fully reflected the App's description below. 
 
-MyTimeMaster is a time management and planner application. With MyTimeMaster app, a user can create a personal account and use the app as a tool to plan and allocate their time daily/weekly/monthly. User will input information such as class schedules, what they plan to do for certain hours of a day/a week, who they will meet, etc. The app will read user input and display in a calendar interface.
+## What is MyTimeMaster?
+MyTimeMaster (MTM) is a time management and planner application.
+With MyTimeMaster app, you can create a personal account and use the app as a tool to plan and allocate your time daily/weekly/monthly.
+You will input what you plan to do for certain hours of a day and the type of that activity (e.i. Work, Study, Exercise, etc).
+The app will display the list of activities you created in certain days and the visualization of how the you allocate your time.
 
-Furthermore, this app aims to promote the users with a habit of managing time wisely and living a fulfilled and balanced life. Specifically, users will use the app to plan their week/month in advance and specific what type of activities they do (e.i. Study, work, exercise, art work, entertain, socialize, sleep, etc.). Then the app will calculate the total hours the users use per week/per month and display the information of how users use their time with d3.js data visualization.The data will also be used to measure their work-life balance or their productivity. 
+## MyTimeMaster's mission:
+MTM app aims to promote users with a habit of managing time wisely and living a fulfilled and balanced life.
+Specifically, the app will show the percentage of each activity category that users allocate daily
+(weekly/monthly not set supported) and display the information with d3.js data visualization.
+The visualization can help users determine their work-life balance or their productivity.
 
-We will integrate Google Calendar Api so that the user can add events to his/her Google Calendar, Facebook Api so user can select the friend they meet, and Meetups api so the user can select the event to attend. 
+## Credit
+[jQuery Datepicker](http://keith-wood.name/datepick.html) by Keith Wood
 
-The 4 scenarios of the MyTimeMaster Apps
-
-1.     Registration
-A new user can create a personal account by using proving their first and last name, address and password. The application will check if the email address is valid. After registering, users can login can start using the application features to plan and allocate their time/daily/ weekly/monthly activities.
-Users can also sign up with their Facebook Account.
-
-2.     Create Events
-The user will create event/daily task in this app.
-
-3.     Display Events
-Show events 
-
-4.    Time allocation chart (d3.js)
-Users  provide the time frame for each of their activities (activities will be categorized in types such as work, study, socialization, entertainment), and the application can display the information of how users use their time in week/month/year with the d3.js data visualization.
-
-Currently Implement: 
-1. Registration
-2. Create event  
-3. Show events
-4. Time allocation chart
+The bar chart is adopted from [Wrapping Long Labels](https://bl.ocks.org/mbostock/7555321) by Mike Bostock
 

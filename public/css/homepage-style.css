@@ -27,6 +27,7 @@
 .x.axis path {
     display: none;
 }
+/* Css for whole body*/
 body {
     font-family: "Comic Sans MS";
 }
@@ -47,19 +48,7 @@ h2, h1 {
     color: navy;
     text-align: center;
 }
-#hi {
-    color: #145A32;
-    text-align: center;
-}
-article {
-    color: black;
-    margin: 20px;
-    padding: 10px;
-    background-color: white;
-    /*opacity: 0.8;*/
-    filter: alpha(opacity=60); /* For IE8 and earlier */
-    border-radius: 25px;
-}
+
 footer{
     text-align: center;
 }
@@ -107,4 +96,45 @@ a.remove-badge {
     cursor: pointer;
     text-decoration:none;
     color: white;
+}
+
+/* css for index.html*/
+#hi {
+    color: CRIMSON;
+}
+#hi1 {
+    color: orange;
+}
+#hi2 {
+    color: yellow;
+}
+#hi3 {
+    color: green;
+}
+#hi4 {
+    color: blue;
+}
+#hi5 {
+    color: navy;
+}
+#hi6 {
+    color: purple;
+}
+#hi7 {
+    color: hotpink;
+}
+/*Css for about.html*/
+article {
+    color: black;
+    margin: 20px;
+    padding: 10px;
+    background-color: white;
+    /*opacity: 0.8;*/
+    filter: alpha(opacity=60); /* For IE8 and earlier */
+    border-radius: 25px;
+}
+#screenshot {
+    border: 2px solid navy;
+    border-radius: 10px;
+    align-content: center;
 }

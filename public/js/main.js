@@ -74,8 +74,8 @@ function updateTimeChart(filterDate) {
             totalHours += parseFloat(data[i].hours);
         }
         // Below d3.js is adopted from https://bl.ocks.org/mbostock/7555321
-        var margin = {top: 20, right: 180, bottom: 100, left: 80},
-            width = 700 - margin.left - margin.right,
+        var margin = {top: 20, right: 120, bottom: 100, left: 40},
+            width = 750 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
 
         var x = d3.scale.ordinal()
@@ -203,12 +203,12 @@ function updatePieChart(filterDate){
             // Set chart options
             var options = {
                 backgroundColor: 'transparent',
-                'title':"Hover me",
-                // 'is3D':true,
-                'width':400,
-                'height':400,
+                'title': 'Hover Me',
+                titleTextStyle : {color: 'navy', fontName: "Comic Sans MS", fontSize: 15},
+                'width':700,
+                'height':500,
                 'colors': colors,
-                legend : 'none'};
+                legend : 'right'};
 
             // Instantiate and draw our chart, passing in some options.
             var chart = new google.visualization.PieChart(document.getElementById('pieChart'));
@@ -347,14 +347,15 @@ var EventForm = React.createClass({
         var color;
         if (type === "Exercise"){ color = "STEELBLUE";}
         else if (type === "ExploreWorld"){ color = "GREEN";}
-        else if (type === "Hobby"){ color = "LIGHTSALMON";}
-        else if (type === "Relax"){ color = "LIGHTSKYBLUE";}
-        else if (type === "Family"){ color = "LIGHTPINK";}
+        else if (type === "Family"){ color = "DEEPPINK";}
         else if (type === "Friend"){ color = "GOLD";}
+        else if (type === "Hobby"){ color = "LIGHTSALMON";}
         else if (type === "Love"){ color = "RED";}
-        else if (type === "Socialize") { color = "LIGHTBLUE";}
+        else if (type === "Relax"){ color = "LIGHTSKYBLUE";}
+        else if (type === "Recharge"){ color = "MIDNIGHTBLUE";}
+        else if (type === "Socialize") { color = "DARKBLUE";}
         else if (type === "Study") { color = "ORANGE";}
-        else if (type === "Work") { color = "GRAY";}
+        else if (type === "Work") { color = "SLATEGRAY";}
         this.setState({eventType: type, eventColor: color});
     },
     handleSubmit: function(e) {
@@ -379,11 +380,12 @@ var EventForm = React.createClass({
                         <select className="form-control" ref='type' value={this.state.eventType} onChange={this.handleChange}>
                             <option value="Exercise">Exercise</option>
                             <option value="ExploreWorld">Explore World Around Me</option>
-                            <option value="Hobby">Hobby</option>
-                            <option value="Relax">Just Relax</option>
                             <option value="Family">Spend Time with Family</option>
                             <option value="Friend">Spend time with Friend</option>
-                            <option value="Love">Spend time with Loved Ones</option>
+                            <option value="Hobby">Hobby</option>
+                            <option value="Love">Spend time with Loved One</option>
+                            <option value="Recharge">Recharge</option>
+                            <option value="Relax">Just Relax</option>
                             <option value="Socialize">Get out there and socialize</option>
                             <option value="Study">Study</option>
                             <option value="Work">Work</option>
@@ -470,7 +472,15 @@ removeEvent: function (key) {
         return (
             <div className="eventBox">
                 <div className="col-sm-12">
-                    <h1 id="hi">Hi {displayName}! Let's make your colorful day together! </h1>
+                    <h1>Hi {displayName}, Let's make your
+                        <span id="hi"> c</span>
+                        <span id="hi1">o</span>
+                        <span id="hi2">l</span>
+                        <span id="hi3">o</span>
+                        <span id="hi4">r</span>
+                        <span id="hi5">f</span>
+                        <span id="hi6">u</span>
+                        <span id="hi7">l</span> day together </h1>
                 </div>
                 <div className="col-sm-12">
                     <div className="col-sm-1"></div>
@@ -479,10 +489,10 @@ removeEvent: function (key) {
                         <div id="inlineDatepicker"></div>
                         <h4><small>Current date:</small> <br/><span id="printDate">{getToday()[1]}</span></h4>
                     </div>
-                    <div className="col-sm-4" id="eventInput">
+                    <div className="col-sm-7" id="eventInput">
                         <EventForm onEventSubmit={this.handleEventSubmit} />
                     </div>
-                    <div className="col-sm-4"></div>
+                    <div className="col-sm-1"></div>
                 </div>
 
                 <br/><br/><br/>
@@ -496,7 +506,7 @@ removeEvent: function (key) {
 
                     <div className="col-sm-5" id="eventChart">
                         <h2>Time Chart</h2>
-                        <svg className="chart" width="300" height="600"></svg>
+                        <svg className="chart"></svg>
 
                     </div>
                     <div className="col-sm-4">
