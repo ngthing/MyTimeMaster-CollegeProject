@@ -85,7 +85,7 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="375">
-              <caret line="25" column="57" selection-start-line="25" selection-start-column="57" selection-end-line="25" selection-end-column="57" />
+              <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -431,7 +431,7 @@
       <workItem from="1484748507383" duration="2746000" />
       <workItem from="1484760427860" duration="5215000" />
       <workItem from="1484788330670" duration="9749000" />
-      <workItem from="1484855484151" duration="6053000" />
+      <workItem from="1484855484151" duration="6201000" />
     </task>
     <task id="LOCAL-00001" summary="HW3">
       <created>1474951041270</created>
@@ -528,7 +528,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="280905000" />
+    <option name="totallyTimeSpent" value="281053000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="263" y="23" width="1175" height="717" extended-state="0" />
@@ -927,7 +927,7 @@
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
-          <caret line="25" column="57" selection-start-line="25" selection-start-column="57" selection-end-line="25" selection-end-column="57" />
+          <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
           <folding />
         </state>
       </provider>

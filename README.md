@@ -23,4 +23,4 @@ The visualization can help users determine their work-life balance or their prod
 The bar chart is adopted from [Wrapping Long Labels](https://bl.ocks.org/mbostock/7555321) by Mike Bostock
 
 ## Screenshot
-![Alt](/screenshots/MTM-Jan19.png "MTM as of Jan 19, 2017")
+![Alt](public/screenshots/MTM-Jan19.png "MTM as of Jan 19, 2017")
