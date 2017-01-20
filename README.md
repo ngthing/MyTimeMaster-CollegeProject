@@ -19,8 +19,8 @@ The visualization can help users determine their work-life balance or their prod
 
 ## Credit
 [jQuery Datepicker](http://keith-wood.name/datepick.html) by Keith Wood
-
 The bar chart is adopted from [Wrapping Long Labels](https://bl.ocks.org/mbostock/7555321) by Mike Bostock
+Pie Chart is developed using [Google Chart API](https://google-developers.appspot.com/chart/interactive/docs/gallery/piechart) 
 
 ## Screenshot
 ![Alt](public/screenshots/MTM-Jan19.png "MTM as of Jan 19, 2017")
