@@ -2,6 +2,7 @@
  * Created by thinguyen on 10/10/16.
  */
 
+// Initialize the Realtime Database JavaScript SDK
 // Set up Firebase
 "use strict";
 var config = {
@@ -12,28 +13,72 @@ var config = {
     messagingSenderId: "17686327988"
 };
 firebase.initializeApp(config);
-// FB test
-function sharePost() {
-    FB.ui(
-        {
-            method: 'share',
-            href: 'https://developers.facebook.com/docs/',
-        },
-        // callback
-        function(response) {
-            if (response && !response.error_message) {
-                alert('Posting completed.');
-            } else {
-                alert('Error while posting.');
-            }
-        }
-    );
+var userName, displayName;
+// Initialize the Facebook JavaScript SDK
+FB.init({
+    appId: '165781817203603',
+    xfbml: true,
+    status: true,
+    cookie: true,
+});
 
-}
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        // console.log("Signed in");
+        $("#firebaseui-auth-container").hide();
+        $("#intro").hide();
+        // User is signed in.
+        displayName = user.displayName;
+        var email = user.email;
+        var emailVerified = user.emailVerified;
+        var photoURL = user.photoURL;
+        var uid = user.uid;
+        var providerData = user.providerData;
+        var accessToken= user.accessToken;
+        userName = user.uid;
+        ReactDOM.render(<EventBox />, document.getElementById('content'));
+
+
+        user.getToken().then(function(accessToken) {
+            document.getElementById('sign-in-status').textContent = "Welcome, " + displayName;
+        });
+    } else {
+        // User is signed out.
+        $("#sign-in-status").hide();
+        $("#signout").hide();
+        // FirebaseUI config.
+        var uiConfig = {
+            'signInSuccessUrl': '/', //URL that we get sent BACK to after logging in
+            'signInOptions': [
+                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+                // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+                // firebase.auth.GithubAuthProvider.PROVIDER_ID,
+                // firebase.auth.EmailAuthProvider.PROVIDER_ID
+            ],
+
+            // Terms of service url.
+            'tosUrl': '<your-tos-url>',
+        };
+        // Initialize the FirebaseUI Widget using Firebase.
+        var ui = new firebaseui.auth.AuthUI(firebase.auth());
+        // The start method will wait until the DOM is loaded.
+        ui.start('#firebaseui-auth-container', uiConfig);
+        $("#content").hide();
+        $("#chart").hide();
+        $("#pickDate").hide();
+        $("#intro").show();
+        $("#firebaseui-auth-container").show();
+    }
+}, function(error) {
+    console.log(error);
+});
+
 // Global variables
 var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-//Global function
+//Global functions
+
 // GetToday return an array of two presentation of the current date
 function getToday(){
     var today = new Date();
@@ -153,7 +198,6 @@ function updateTimeChart(filterDate) {
 }
 
 function updatePieChart(filterDate){
-    console.log("inside updatePieChart");
     var eventsBoxRef = firebase.database().ref('eventsBox').child(userName);
 
     eventsBoxRef.on('value', function(snapshot) {
@@ -216,71 +260,6 @@ function updatePieChart(filterDate){
         }
         });
 }
-var userName, displayName;
-firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-        // console.log("Signed in");
-        $("#firebaseui-auth-container").hide();
-        $("#intro").hide();
-        // User is signed in.
-        displayName = user.displayName;
-        var email = user.email;
-        var emailVerified = user.emailVerified;
-        var photoURL = user.photoURL;
-        var uid = user.uid;
-        var providerData = user.providerData;
-        var accessToken= user.accessToken;
-        userName = user.uid;
-        ReactDOM.render(<EventBox />, document.getElementById('content'));
-
-
-        user.getToken().then(function(accessToken) {
-
-            document.getElementById('sign-in-status').textContent = "Welcome, " + displayName;
-            // document.getElementById('account-details').textContent = JSON.stringify({
-            //     displayName: displayName,
-            //     email: email,
-            //     emailVerified: emailVerified,
-            //     photoURL: photoURL,
-            //     uid: uid,
-            //     accessToken: accessToken,
-            //     providerData: providerData
-            // }, null, '  ');
-        });
-    } else {
-        // User is signed out.
-        $("#sign-in-status").hide();
-        $("#signout").hide();
-        // FirebaseUI config.
-        var uiConfig = {
-            'signInSuccessUrl': '/', //URL that we get sent BACK to after logging in
-            'signInOptions': [
-                // Leave the lines as is for the providers you want to offer your users.
-
-                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-
-                // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-                // firebase.auth.GithubAuthProvider.PROVIDER_ID,
-                // firebase.auth.EmailAuthProvider.PROVIDER_ID
-            ],
-
-            // Terms of service url.
-            'tosUrl': '<your-tos-url>',
-        };
-        // Initialize the FirebaseUI Widget using Firebase.
-        var ui = new firebaseui.auth.AuthUI(firebase.auth());
-        // The start method will wait until the DOM is loaded.
-        ui.start('#firebaseui-auth-container', uiConfig);
-        $("#content").hide();
-        $("#chart").hide();
-        $("#pickDate").hide();
-        $("#intro").show();
-        $("#firebaseui-auth-container").show();
-    }
-}, function(error) {
-    console.log(error);
-});
 
 // Event, EventList, EventForm, EventBox Components
 var Event = React.createClass({
@@ -302,18 +281,6 @@ var EventList = React.createClass({
         var removeEvent= this.props.removeEvent;
         var filterDate = this.props.filterDate;
         var eventNodes = this.props.data.filter(function(value){
-            // console.log("Comparing "  + " with");
-            // console.log(value);
-            // //Only include those that are 1 hour
-            // if(value.hours == 1)
-            //     return true;
-            // else
-            // {
-            //     console.log("Filter " + value.hours);
-            //     return false;
-            // }
-            // console.log("Get events only on " + filterDate);
-            // console.log(value.name);
             if (value.date == filterDate) {
                 totalEventsHoursToday += parseFloat(value.hours);
                 return true;
@@ -457,7 +424,7 @@ var EventBox = React.createClass({
     updateTimeChart(todayToStoreInFB);
     updatePieChart(todayToStoreInFB);
 },
-removeEvent: function (key) {
+    removeEvent: function (key) {
         firebase.auth().currentUser.getToken().then(function(idToken) {
             // console.log("token" + idToken);
             $.ajax({
@@ -466,6 +433,26 @@ removeEvent: function (key) {
                 data: {key: key, token: idToken}
             });
         });
+    },
+    shareThis: function(){
+        FB.ui(
+            {
+                method: 'share',
+                quote: "Share this event",
+                href: "http://mason.gmu.edu/~tnguy138/MyTimeMaster"
+            },
+            // callback
+            function(response) {
+                if (response && !response.error_message) {
+                    alert('Posting completed.');
+                } else {
+                    alert('Error while posting.');
+                    exit();
+                }
+            }
+        );
+
+
     },
 
     render: function() {
@@ -502,6 +489,7 @@ removeEvent: function (key) {
                     <div className="col-sm-3" id="eventList">
                         <h2>All Activities</h2>
                         <EventList data={this.state.data} removeEvent={this.removeEvent} filterDate={this.state.filterDate}/>
+                        <button onClick={this.shareThis}>Share</button><br/>
                     </div>
 
                     <div className="col-sm-5" id="eventChart">
