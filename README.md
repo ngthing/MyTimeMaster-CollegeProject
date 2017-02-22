@@ -3,8 +3,6 @@ A time management and planner application
 
 Live Demo available at Heroku: https://afternoon-reef-38020.herokuapp.com/
 
-Note: This project is in process. Demo has not yet fully reflected the App's description below. 
-
 ## What is MyTimeMaster?
 MyTimeMaster (MTM) is a time management and planner application.
 With MyTimeMaster app, you can create a personal account and use the app as a tool to plan and allocate your time daily/weekly/monthly.
