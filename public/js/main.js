@@ -209,6 +209,13 @@ function updatePieChart(filterDate){
                 data.push(childData);
             }
         });
+
+        /* Create a mapTypeHour to map the event types with the total of its hours.
+            Usage: Different events can be categorized into one event type,
+            E.g. two events "Talk to Mom" (duration 1 hour)  and "Dinner with sister" (duration 1 hour)
+            can be of type "Spend time with Family"
+            So the event type "Spend time with Family" consume the total of 2 hours in filterDate
+        */
         var mapTypeHour = new Map();
         var colors=[];
         for (var event of data){
@@ -218,6 +225,8 @@ function updatePieChart(filterDate){
                 mapTypeHour.set(event.type, parseFloat(event.hours));
                 colors.push(event.color);
             }
+            // If the current event type is already in mapTypeHour, add the hours of the current event
+            // to the current hour of that event type.
             else {
                 var currentHours =  mapTypeHour.get(event.type);
                 mapTypeHour.set(event.type, parseFloat(event.hours) + currentHours);
@@ -261,7 +270,14 @@ function updatePieChart(filterDate){
         });
 }
 
-// Event, EventList, EventForm, EventBox Components
+/* Event, EventList, EventForm, EventBox Components
+ Component Hierachy:
+ EventBox
+    EventForm
+    EventList
+        Event
+
+*/
 var Event = React.createClass({
     render: function() {
         return (
@@ -364,6 +380,8 @@ var EventForm = React.createClass({
         );
     }
 });
+
+
 var EventBox = React.createClass({
     mixins: [ReactFireMixin],
 
